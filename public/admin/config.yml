@@ -1,0 +1,148 @@
+# Content manager for the Sabbir LIVE website — open /admin on the live site.
+# Every save becomes a commit in the GitHub repository, and the host
+# (e.g. Vercel) redeploys automatically. See README → "Managing videos".
+
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/sabbir-live # ← CONFIGURE: the GitHub repository that holds this site
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: videos
+    label: Videos
+    description: Add a video by pasting its link. Facebook, TikTok and YouTube are detected automatically.
+    files:
+      - name: videos
+        label: All videos
+        file: content/videos.json
+        format: json
+        fields:
+          - name: videos
+            label: Videos
+            label_singular: Video
+            widget: list
+            add_to_top: true
+            summary: "{{fields.title}} {{fields.url}}"
+            fields:
+              - name: url
+                label: Video URL
+                widget: string
+                hint: >-
+                  Paste the full link, e.g. https://www.facebook.com/reel/123…,
+                  https://www.tiktok.com/@sabbirlive.official/video/123…, or
+                  https://www.youtube.com/shorts/abc… — the platform is detected automatically.
+                pattern: ['^https?://', 'Must be a full link starting with https://']
+              - name: title
+                label: Title
+                widget: string
+                required: false
+                hint: Optional for YouTube and TikTok (filled in automatically). Recommended for Facebook.
+              - name: caption
+                label: Caption / description
+                widget: text
+                required: false
+              - name: thumbnail
+                label: Thumbnail / poster image
+                widget: image
+                required: false
+                hint: Optional for YouTube and TikTok. Recommended for Facebook — use a 9:16 image for Reels.
+              - name: publishedAt
+                label: Publication date
+                widget: datetime
+                format: YYYY-MM-DD
+                time_format: false
+                required: false
+              - name: featured
+                label: Featured
+                widget: boolean
+                default: false
+                required: false
+                hint: Featured videos are shown first. The first featured Facebook video appears in the homepage hero.
+              - name: priority
+                label: Display priority
+                widget: number
+                value_type: int
+                default: 0
+                required: false
+                hint: Higher numbers appear earlier. Leave at 0 to sort by publication date.
+              - name: format
+                label: Video shape
+                widget: select
+                default: auto
+                required: false
+                options:
+                  - { label: "Automatic (Reels, Shorts and TikToks are vertical)", value: auto }
+                  - { label: Vertical 9:16, value: vertical }
+                  - { label: Landscape 16:9, value: landscape }
+              - name: hidden
+                label: Hide from the website
+                widget: boolean
+                default: false
+                required: false
+
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Profile, About & social links
+        file: content/site.json
+        format: json
+        fields:
+          - { name: creatorName, label: Creator name, widget: string }
+          - { name: brandName, label: Brand name, widget: string }
+          - name: hero
+            label: Homepage hero
+            widget: object
+            fields:
+              - { name: eyebrow, label: Small label above the headline, widget: string }
+              - { name: headline, label: Headline, widget: string }
+              - { name: text, label: Supporting text, widget: text }
+          - name: about
+            label: About section
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: paragraphs, label: Paragraphs, widget: list, field: { name: paragraph, label: Paragraph, widget: text } }
+          - name: social
+            label: Social media links
+            widget: object
+            fields:
+              - name: facebook
+                label: Facebook
+                widget: object
+                fields:
+                  - { name: url, label: Facebook Page link (used by every Follow button), widget: string }
+                  - name: pageUrl
+                    label: Full Facebook Page address (optional)
+                    widget: string
+                    required: false
+                    hint: e.g. https://www.facebook.com/YourPageName — enables the live "Latest posts" feed on the Facebook page.
+                  - { name: label, label: Label, widget: string }
+              - name: tiktok
+                label: TikTok
+                widget: object
+                fields:
+                  - { name: url, label: Profile link, widget: string }
+                  - { name: handle, label: Username (without @), widget: string }
+                  - { name: label, label: Label, widget: string }
+              - name: youtube
+                label: YouTube
+                widget: object
+                fields:
+                  - { name: url, label: Channel link, widget: string }
+                  - { name: handle, label: Handle (without @), widget: string }
+                  - name: channelId
+                    label: Channel ID (optional)
+                    widget: string
+                    required: false
+                    hint: Starts with "UC". When set, the newest uploads appear on the site automatically.
+                  - { name: label, label: Label, widget: string }
+          - name: contact
+            label: Contact
+            widget: object
+            fields:
+              - { name: email, label: Public email address (optional), widget: string, required: false }
+              - { name: intro, label: Contact page intro, widget: text }

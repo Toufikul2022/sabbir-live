@@ -1,0 +1,38 @@
+{
+  "creatorName": "Sabbir Ahmed",
+  "brandName": "Sabbir LIVE",
+  "hero": {
+    "eyebrow": "Facebook · TikTok · YouTube",
+    "headline": "All My Videos. One Place.",
+    "text": "Explore my latest videos, Reels, Shorts, and activities across Facebook, TikTok, and YouTube."
+  },
+  "about": {
+    "heading": "About Sabbir Ahmed",
+    "paragraphs": [
+      "I'm Sabbir Ahmed, the creator behind Sabbir LIVE. I share videos on Facebook, TikTok and YouTube.",
+      "This website brings all of them together in one place, so you can catch up on my latest Reels, TikToks and Shorts without jumping between apps."
+    ]
+  },
+  "social": {
+    "facebook": {
+      "url": "https://www.facebook.com/share/19HjXcQMge/",
+      "pageUrl": "",
+      "label": "Facebook Page"
+    },
+    "tiktok": {
+      "url": "https://www.tiktok.com/@sabbirlive.official",
+      "handle": "sabbirlive.official",
+      "label": "TikTok"
+    },
+    "youtube": {
+      "url": "https://www.youtube.com/@sabbirlive",
+      "handle": "sabbirlive",
+      "channelId": "",
+      "label": "YouTube Channel"
+    }
+  },
+  "contact": {
+    "email": "",
+    "intro": "For collaborations, brand partnerships, or anything else — send me a message and I'll get back to you."
+  }
+}
