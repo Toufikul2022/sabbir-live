@@ -4,7 +4,7 @@
 
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/sabbir-live # ← CONFIGURE: the GitHub repository that holds this site
+  repo: Toufikul2022/sabbir-live
   branch: main
 
 media_folder: public/uploads
