@@ -58,8 +58,8 @@ export function PlatformPage({ platform, videos }: { platform: Platform; videos:
       )}
 
       <section className="relative overflow-hidden">
-        <PlatformIcon platform={platform} className={`pointer-events-none absolute -top-10 -right-16 size-[22rem] sm:size-[30rem] ${heroIcon[platform]}`} />
-        <div className={`${container} relative pt-6 pb-10 sm:pt-10 sm:pb-14`}>
+        <PlatformIcon platform={platform} className={`pointer-events-none absolute -top-10 -right-16 size-[18rem] sm:size-[24rem] ${heroIcon[platform]}`} />
+        <div className={`${container} relative pt-6 pb-8 sm:pt-8 sm:pb-10`}>
           <div className="eyebrow flex items-center justify-between gap-4 border-y border-line py-3 text-muted">
             <span className="flex items-center gap-2 text-white">
               <PlatformIcon platform={platform} className="size-3.5" /> {meta.name}

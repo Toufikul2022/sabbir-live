@@ -15,7 +15,7 @@ export function VideoGrid({ videos, pageSize = 12, layout = "portrait" }: { vide
       <ul
         className={
           layout === "portrait"
-            ? "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5"
+            ? "grid grid-cols-2 gap-x-3 gap-y-6 min-[480px]:grid-cols-3 md:grid-cols-4 md:gap-x-4 md:gap-y-8 lg:grid-cols-5 xl:grid-cols-6"
             : "grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3"
         }
       >

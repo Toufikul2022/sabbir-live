@@ -61,7 +61,7 @@ export function SectionHeading({
   as?: "h1" | "h2";
 }) {
   return (
-    <div className="mb-7 sm:mb-10" data-reveal>
+    <div className="mb-6 sm:mb-8" data-reveal>
       <div className="mb-3 flex items-center gap-4">
         {label && <p className="eyebrow flex shrink-0 items-center gap-2 text-muted">{label}</p>}
         <span className="h-px flex-1 bg-line" aria-hidden />
@@ -129,7 +129,7 @@ export function EmptyState({ platform, compact = false }: { platform: Platform; 
 
 export function SkeletonGrid({ count = 8 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5" aria-hidden>
+    <div className="grid grid-cols-2 gap-x-3 gap-y-6 min-[480px]:grid-cols-3 md:grid-cols-4 md:gap-x-4 md:gap-y-8 lg:grid-cols-5 xl:grid-cols-6" aria-hidden>
       {Array.from({ length: count }, (_, i) => (
         <div key={i} className="aspect-[9/16] animate-pulse rounded-[var(--radius-card)] bg-surface-2" />
       ))}

@@ -31,16 +31,16 @@ function Trigger({ video, label, className, children }: { video: Video; label: s
 }
 
 const frame =
-  "relative overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/10 transition duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1.5 group-hover:ring-2 group-hover:ring-brand group-hover:shadow-[0_18px_40px_-12px_rgb(236_28_36/0.45)]";
+  "relative overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/10 transition duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1 group-hover:ring-2 group-hover:ring-brand group-hover:shadow-[0_18px_40px_-12px_rgb(236_28_36/0.45)]";
 
 function PlayBadge({ video, size = "md" }: { video: Video; size?: "md" | "lg" }) {
-  const dim = size === "lg" ? "size-16" : "size-12";
+  const dim = size === "lg" ? "size-14" : "size-10";
   return (
     <span
       className={`absolute top-1/2 left-1/2 inline-flex ${dim} -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 ring-1 ring-white/50 backdrop-blur-sm transition duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110 group-hover:bg-brand group-hover:ring-brand`}
       aria-hidden
     >
-      {video.embedUrl ? <PlayIcon className="ml-0.5 size-5" /> : <ExternalIcon className="size-5" />}
+      {video.embedUrl ? <PlayIcon className="ml-0.5 size-4" /> : <ExternalIcon className="size-4" />}
     </span>
   );
 }
@@ -49,7 +49,7 @@ function PlayBadge({ video, size = "md" }: { video: Video; size?: "md" | "lg" })
 export function VideoCard({
   video,
   index,
-  sizes = "(min-width: 1024px) 260px, (min-width: 640px) 33vw, 50vw",
+  sizes = "(min-width: 1024px) 200px, (min-width: 480px) 33vw, 50vw",
   priority = false,
 }: {
   video: Video;
@@ -66,21 +66,21 @@ export function VideoCard({
         <div className={`${frame} aspect-[9/16]`}>
           <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} videoId={video.id} sizes={sizes} priority={priority} />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40" aria-hidden />
-          <span className="absolute top-2.5 left-2.5 inline-flex size-7 items-center justify-center rounded-sm bg-black/70">
+          <span className="absolute top-2 left-2 inline-flex size-6 items-center justify-center rounded-sm bg-black/70">
             <PlatformIcon platform={video.platform} className="size-3.5" />
             <span className="sr-only">{meta.name}</span>
           </span>
           {index !== undefined && (
-            <span className="display absolute right-2.5 bottom-2 text-4xl text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" aria-hidden>
+            <span className="display absolute right-2 bottom-1.5 text-3xl text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" aria-hidden>
               {String(index).padStart(2, "0")}
             </span>
           )}
-          <span className="eyebrow absolute top-3 right-3 text-[0.7rem] text-white/85">{KIND_LABEL[video.kind]}</span>
+          <span className="eyebrow absolute top-2.5 right-2.5 text-[0.65rem] text-white/85">{KIND_LABEL[video.kind]}</span>
           <PlayBadge video={video} />
         </div>
-        <div className="mt-3 pr-2">
+        <div className="mt-2.5 pr-1">
           {date && <p className="eyebrow text-[0.7rem] text-muted">{date}</p>}
-          <h3 className="mt-1 line-clamp-2 font-display text-[1.2rem] leading-tight font-semibold">
+          <h3 className="mt-0.5 line-clamp-2 font-display text-[1.05rem] leading-tight font-semibold">
             <span className="link-sweep">{label}</span>
           </h3>
         </div>

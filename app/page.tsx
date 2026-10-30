@@ -16,7 +16,7 @@ import logo from "@/public/brand/logo-640.png";
 // Re-check feeds and oEmbed data at most once an hour (keep in sync with VIDEO_REVALIDATE).
 export const revalidate = 3600;
 
-const railItem = "w-[62vw] max-w-[250px] md:w-auto md:max-w-none";
+const railItem = "w-[42vw] max-w-[190px] md:w-auto md:max-w-none";
 
 export default async function HomePage() {
   const all = await getAllVideos();
@@ -27,7 +27,7 @@ export default async function HomePage() {
 
   // Facebook is the primary platform: its featured (or newest) video leads the page.
   const hero = facebook.find((v) => v.featured) ?? facebook[0] ?? null;
-  const facebookRest = facebook.filter((v) => v !== hero).slice(0, 8);
+  const facebookRest = facebook.filter((v) => v !== hero).slice(0, 12);
   const tiktokLatest = tiktok.slice(0, 6);
   const ytShorts = youtube.filter((v) => v.orientation === "vertical").slice(0, 6);
   const ytVideos = youtube.filter((v) => v.orientation === "landscape").slice(0, 4);
@@ -55,7 +55,7 @@ export default async function HomePage() {
 
       {/* ─── Hero ─── */}
       <section aria-labelledby="hero-title" className="relative">
-        <div className={`${container} pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pb-20`}>
+        <div className={`${container} pt-6 pb-12 sm:pt-8 sm:pb-14`}>
           <div className="eyebrow flex items-center justify-between gap-4 border-y border-line py-3 text-muted">
             <span className="flex items-center gap-2 text-white">
               <span className="live-dot" aria-hidden /> On air · {siteConfig.creatorName}
@@ -63,7 +63,7 @@ export default async function HomePage() {
             <span className="hidden sm:inline">{siteConfig.hero.eyebrow}</span>
           </div>
 
-          <div className="grid items-end gap-10 pt-8 sm:pt-12 lg:grid-cols-[1fr_20rem] lg:gap-14 xl:grid-cols-[1fr_22rem]">
+          <div className="grid items-center gap-10 pt-8 sm:pt-10 lg:grid-cols-[1fr_16rem] lg:gap-14 xl:grid-cols-[1fr_17rem]">
             <div>
               <h1 id="hero-title" className="display text-hero">
                 <span className="block overflow-hidden pb-[0.04em]">
@@ -108,13 +108,13 @@ export default async function HomePage() {
                 href={`#${p}-videos`}
                 className={`group btn-sweep flex h-full items-center gap-5 px-1 py-5 transition-colors duration-300 hover:text-white sm:px-5 sm:py-6 ${i === 0 ? "[--sweep:var(--color-facebook)]" : "[--sweep:var(--color-surface-3)]"}`}
               >
-                <span className="display outline-text text-5xl transition group-hover:[-webkit-text-stroke-color:#fff]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="display outline-text text-4xl transition group-hover:[-webkit-text-stroke-color:#fff]">{String(i + 1).padStart(2, "0")}</span>
                 <span className="min-w-0">
                   <span className="eyebrow flex items-center gap-2 text-muted group-hover:text-white/80">
                     {i === 0 && <span className="live-dot" aria-hidden />}
                     {i === 0 ? "Main channel" : platformMeta[p].name} · {counts[p] ? `${counts[p]} video${counts[p] === 1 ? "" : "s"}` : "Coming soon"}
                   </span>
-                  <span className="display mt-1.5 block text-3xl">{platformMeta[p].name}</span>
+                  <span className="display mt-1 block text-2xl">{platformMeta[p].name}</span>
                 </span>
                 <ArrowRightIcon className="ml-auto size-5 shrink-0 text-brand transition duration-300 group-hover:translate-x-1 group-hover:text-white" />
               </a>
@@ -124,7 +124,7 @@ export default async function HomePage() {
       </nav>
 
       {/* ─── 01 Facebook (highest priority) ─── */}
-      <section aria-labelledby="facebook-videos-title" id="facebook-videos" className={`${container} pt-20 sm:pt-28`}>
+      <section aria-labelledby="facebook-videos-title" id="facebook-videos" className={`${container} pt-16 sm:pt-24`}>
         <SectionHeading
           id="facebook-videos-title"
           index={1}
@@ -133,14 +133,14 @@ export default async function HomePage() {
           action={<ViewAllLink href="/facebook">View all</ViewAllLink>}
         />
         {facebookRest.length ? (
-          <VideoRail videos={facebookRest} cols="md:grid-cols-3 lg:grid-cols-4" numbered />
+          <VideoRail videos={facebookRest} cols="md:grid-cols-4 lg:grid-cols-6" numbered />
         ) : (
           <EmptyState platform="facebook" compact />
         )}
       </section>
 
       {/* ─── 02 TikTok ─── */}
-      <section aria-labelledby="tiktok-videos-title" id="tiktok-videos" className={`${container} pt-20 sm:pt-28`}>
+      <section aria-labelledby="tiktok-videos-title" id="tiktok-videos" className={`${container} pt-16 sm:pt-24`}>
         <SectionHeading
           id="tiktok-videos-title"
           index={2}
@@ -152,7 +152,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── 03 YouTube ─── */}
-      <section aria-labelledby="youtube-videos-title" id="youtube-videos" className={`${container} pt-20 sm:pt-28`}>
+      <section aria-labelledby="youtube-videos-title" id="youtube-videos" className={`${container} pt-16 sm:pt-24`}>
         <SectionHeading
           id="youtube-videos-title"
           index={3}
@@ -183,7 +183,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── About ─── */}
-      <section aria-labelledby="about-title" className={`${container} pt-24 sm:pt-36`}>
+      <section aria-labelledby="about-title" className={`${container} pt-20 sm:pt-28`}>
         <div className="grid gap-10 border-t border-line pt-10 md:grid-cols-[14rem_1fr] lg:grid-cols-[18rem_1fr] lg:gap-16" data-reveal>
           <div>
             <p className="eyebrow text-brand-text">About the creator</p>
@@ -202,7 +202,7 @@ export default async function HomePage() {
                 </p>
               ))}
             </div>
-            <Link href="/contact" className="group mt-10 inline-flex items-center gap-3 font-display text-2xl font-bold tracking-wide uppercase">
+            <Link href="/contact" className="group mt-8 inline-flex items-center gap-3 font-display text-xl font-bold tracking-wide uppercase">
               <span className="link-sweep pb-1">Work with me</span>
               <ArrowRightIcon className="size-5 text-brand transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
@@ -211,7 +211,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Follow ─── */}
-      <section aria-labelledby="follow-title" className={`${container} pt-24 sm:pt-36`}>
+      <section aria-labelledby="follow-title" className={`${container} pt-20 sm:pt-28`}>
         <SectionHeading id="follow-title" label="Never miss a video" title="Follow along" />
         <ul className="border-b border-line" data-reveal>
           {PLATFORM_ORDER.map((p) => (
@@ -232,10 +232,10 @@ function splitHeadline(headline: string): [string, string] {
 
 function VideoRail({ videos, cols, numbered = false }: { videos: Video[]; cols: string; numbered?: boolean }) {
   return (
-    <ul className={`rail -mx-4 gap-4 px-4 pt-2 md:mx-0 md:grid md:gap-x-5 md:gap-y-10 md:overflow-visible md:px-0 ${cols}`} data-reveal>
+    <ul className={`rail -mx-4 gap-4 px-4 pt-2 md:mx-0 md:grid md:gap-x-4 md:gap-y-8 md:overflow-visible md:px-0 ${cols}`} data-reveal>
       {videos.map((v, i) => (
         <li key={v.key} className={railItem}>
-          <VideoCard video={v} index={numbered ? i + 1 : undefined} sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, 62vw" />
+          <VideoCard video={v} index={numbered ? i + 1 : undefined} sizes="(min-width: 1024px) 200px, (min-width: 768px) 24vw, 42vw" />
         </li>
       ))}
     </ul>
@@ -245,15 +245,15 @@ function VideoRail({ videos, cols, numbered = false }: { videos: Video[]; cols: 
 function HeroFeature({ video }: { video: Video | null }) {
   if (!video) {
     return (
-      <div className="mx-auto w-full max-w-[20rem] lg:max-w-none" data-reveal>
-        <div className="relative flex aspect-[4/5] flex-col justify-between overflow-hidden border border-line bg-surface p-6 lg:aspect-[9/14]">
+      <div className="mx-auto w-full max-w-[16rem] lg:max-w-none" data-reveal>
+        <div className="relative flex aspect-[9/16] flex-col justify-between overflow-hidden border border-line bg-surface p-6">
           <PlatformIcon platform="facebook" className="pointer-events-none absolute -right-10 -bottom-10 size-64 text-facebook/15" />
           <p className="eyebrow relative flex items-center gap-2 text-white">
             <span className="live-dot" aria-hidden /> Facebook first
           </p>
           <div className="relative">
             <Image src={logo} alt="" className="h-auto w-4/5" sizes="280px" priority />
-            <p className="display mt-6 text-4xl">New Reels drop on Facebook first.</p>
+            <p className="display mt-5 text-3xl">New Reels drop on Facebook first.</p>
             <FollowButton platform="facebook" className="mt-6" />
           </div>
         </div>
@@ -261,16 +261,16 @@ function HeroFeature({ video }: { video: Video | null }) {
     );
   }
   return (
-    <div className="group mx-auto w-full max-w-[20rem] lg:max-w-none" data-reveal>
+    <div className="group mx-auto w-full max-w-[16rem] lg:max-w-none" data-reveal>
       <p className="eyebrow mb-3 flex items-center gap-2">
         <span className="live-dot" aria-hidden /> {video.featured ? "Featured on Facebook" : "Latest on Facebook"}
       </p>
       <div className="relative aspect-[9/16] overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/15 transition duration-500 group-hover:ring-2 group-hover:ring-brand">
-        <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : "Latest Facebook Reel thumbnail"} platform="facebook" sizes="352px" priority />
+        <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : "Latest Facebook Reel thumbnail"} platform="facebook" sizes="272px" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" aria-hidden />
         <HeroPlayButton video={video} />
       </div>
-      {video.title && <h2 className="mt-4 font-display text-2xl leading-tight font-semibold">{video.title}</h2>}
+      {video.title && <h2 className="mt-3 font-display text-xl leading-tight font-semibold">{video.title}</h2>}
       {video.caption && <p className="mt-1.5 line-clamp-2 text-sm text-muted">{video.caption}</p>}
     </div>
   );
@@ -291,15 +291,15 @@ function FollowRow({ platform }: { platform: Platform }) {
       href={profileUrl(platform)}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group btn-sweep flex items-center gap-4 px-1 py-6 transition-colors duration-300 sm:gap-8 sm:px-4 sm:py-8 ${followSweep[platform]}`}
+      className={`group btn-sweep flex items-center gap-4 px-1 py-5 transition-colors duration-300 sm:gap-8 sm:px-4 sm:py-6 ${followSweep[platform]}`}
     >
-      <PlatformIcon platform={platform} className="size-7 shrink-0 sm:size-10" />
-      <span className={`display ${platform === "facebook" ? "text-mega" : "text-title"}`}>{meta.name}</span>
+      <PlatformIcon platform={platform} className="size-6 shrink-0 sm:size-8" />
+      <span className={`display ${platform === "facebook" ? "text-mega" : "text-[clamp(2.2rem,5.5vw,3.75rem)]"}`}>{meta.name}</span>
       <span className="ml-auto hidden text-right sm:block">
         <span className="eyebrow block text-muted transition-colors group-hover:text-white/85">{platform === "facebook" ? "Main channel" : meta.videoNoun}</span>
         <span className="mt-1 block font-semibold">{handle}</span>
       </span>
-      <ArrowRightIcon className="ml-auto size-7 shrink-0 -rotate-45 text-brand transition duration-500 group-hover:rotate-0 group-hover:text-white sm:ml-0 sm:size-9" />
+      <ArrowRightIcon className="ml-auto size-6 shrink-0 -rotate-45 text-brand transition duration-500 group-hover:rotate-0 group-hover:text-white sm:ml-0 sm:size-7" />
       <span className="sr-only">{meta.follow}</span>
     </a>
   );

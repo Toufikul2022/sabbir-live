@@ -9,10 +9,10 @@ import { SocialIcons } from "./SocialIcons";
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-28 bg-ink sm:mt-40">
+    <footer className="mt-24 bg-ink sm:mt-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Closing call to action */}
-        <Link href="/contact" className="group block border-y border-line py-10 sm:py-14" data-reveal>
+        <Link href="/contact" className="group block border-y border-line py-10 sm:py-12" data-reveal>
           <span className="eyebrow flex items-center gap-2 text-muted">
             <span className="live-dot" aria-hidden /> Collaborations · Brands · Hello
           </span>
