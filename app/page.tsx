@@ -25,14 +25,13 @@ export default async function HomePage() {
   const tiktok = by("tiktok");
   const youtube = by("youtube");
 
-  // The page opens with the featured video, or else the most recent one from any platform
-  // (getAllVideos is already sorted that way). It isn't repeated in the sections below.
-  const hero = all[0] ?? null;
-  const notHero = (v: Video) => v !== hero;
-  const facebookRest = facebook.filter(notHero).slice(0, 12);
-  const tiktokLatest = tiktok.filter(notHero).slice(0, 6);
-  const ytShorts = youtube.filter((v) => notHero(v) && v.orientation === "vertical").slice(0, 6);
-  const ytVideos = youtube.filter((v) => notHero(v) && v.orientation === "landscape").slice(0, 4);
+  // Facebook is the main channel: the page opens with its featured (or most recent) video,
+  // which isn't repeated in the Facebook section below.
+  const hero = facebook[0] ?? null;
+  const facebookRest = facebook.filter((v) => v !== hero).slice(0, 12);
+  const tiktokLatest = tiktok.slice(0, 6);
+  const ytShorts = youtube.filter((v) => v.orientation === "vertical").slice(0, 6);
+  const ytVideos = youtube.filter((v) => v.orientation === "landscape").slice(0, 4);
   const counts: Record<Platform, number> = { facebook: facebook.length, tiktok: tiktok.length, youtube: youtube.length };
   const [line1, line2] = splitHeadline(siteConfig.hero.headline);
 
