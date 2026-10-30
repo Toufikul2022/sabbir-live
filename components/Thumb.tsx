@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { Platform } from "@/lib/video-url";
 import { PlatformIcon } from "./Icons";
 import logo from "@/public/brand/logo-320.png";
@@ -6,6 +9,7 @@ import logo from "@/public/brand/logo-320.png";
 const OPTIMIZABLE = [/^i\.ytimg\.com$/, /\.tiktokcdn\.com$/, /\.tiktokcdn-us\.com$/, /\.fbcdn\.net$/];
 
 function canOptimize(src: string) {
+  if (src.startsWith("/api/")) return false; // dynamic images (TikTok covers) are served as-is
   if (src.startsWith("/")) return true;
   try {
     const host = new URL(src).hostname;
@@ -29,12 +33,17 @@ export function Thumb({
   sizes: string;
   priority?: boolean;
 }) {
-  if (!src) return <Poster platform={platform} />;
+  const [failed, setFailed] = useState(false);
+  // An image can fail before React hydrates (onError never fires), so also check on mount.
+  const checkLoaded = (img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth === 0) setFailed(true);
+  };
+  if (!src || failed) return <Poster platform={platform} />;
   const cls = "absolute inset-0 size-full object-cover transition duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.07]";
   if (canOptimize(src)) {
-    return <Image src={src} alt={alt} fill sizes={sizes} className={cls} priority={priority} />;
+    return <Image src={src} alt={alt} fill sizes={sizes} className={cls} priority={priority} ref={checkLoaded} onError={() => setFailed(true)} />;
   }
-  return <img src={src} alt={alt} className={cls} loading={priority ? "eager" : "lazy"} decoding="async" />;
+  return <img src={src} alt={alt} className={cls} loading={priority ? "eager" : "lazy"} decoding="async" ref={checkLoaded} onError={() => setFailed(true)} />;
 }
 
 const posterBg: Record<Platform, string> = {

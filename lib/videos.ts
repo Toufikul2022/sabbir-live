@@ -87,7 +87,7 @@ export async function resolveShareUrl(url: string): Promise<string | null> {
   return null;
 }
 
-type Enrichment = { title?: string; thumbnail?: string; unavailable?: boolean; noEmbed?: boolean };
+type Enrichment = { title?: string; unavailable?: boolean; noEmbed?: boolean };
 
 export async function enrich(platform: Platform, watchUrl: string): Promise<Enrichment> {
   if (platform === "youtube") {
@@ -101,10 +101,10 @@ export async function enrich(platform: Platform, watchUrl: string): Promise<Enri
   if (platform === "tiktok") {
     const { status, body } = await fetchJson(`https://www.tiktok.com/oembed?url=${encodeURIComponent(watchUrl)}`);
     if (status === 400 || status === 404) return { unavailable: true };
-    return { title: str(body?.title), thumbnail: str(body?.thumbnail_url) };
+    return { title: str(body?.title) };
   }
-  // Facebook's oEmbed requires an app token and returns no thumbnail, so Facebook
-  // titles/thumbnails come from the entry itself or from the Graph API sync.
+  // Facebook's oEmbed requires an app token, so Facebook titles and thumbnails
+  // come from the entry itself or from the Graph API sync.
   return {};
 }
 
@@ -112,8 +112,12 @@ function str(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 }
 
-function youtubeThumb(id: string) {
-  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+/** Thumbnails that can be derived from the video ID alone. */
+function autoThumb(platform: Platform, id: string | null) {
+  if (!id) return null;
+  if (platform === "youtube") return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  if (platform === "tiktok") return `/api/tiktok-thumb/${id}`; // always fresh, see that route
+  return null;
 }
 
 async function fromEntry(entry: VideoEntry): Promise<Video | null> {
@@ -130,7 +134,7 @@ async function fromEntry(entry: VideoEntry): Promise<Video | null> {
   }
   const p = parsed;
 
-  const needsLookup = p.id && (p.platform === "tiktok" || !entry.title);
+  const needsLookup = p.id && (p.platform === "tiktok" || !entry.title); // TikTok: also checks the video still exists
   const extra = needsLookup ? await enrich(p.platform, p.watchUrl) : {};
   if (extra.unavailable) {
     console.warn(`[videos] Hiding "${entry.url}": the platform reports it as deleted or private.`);
@@ -149,7 +153,7 @@ async function fromEntry(entry: VideoEntry): Promise<Video | null> {
     embedUrl,
     title: entry.title?.trim() || extra.title || "",
     caption: entry.caption?.trim() || "",
-    thumbnail: entry.thumbnail?.trim() || extra.thumbnail || (p.platform === "youtube" && p.id ? youtubeThumb(p.id) : null),
+    thumbnail: entry.thumbnail?.trim() || autoThumb(p.platform, p.id),
     publishedAt: normalizeDate(entry.publishedAt),
     featured: Boolean(entry.featured),
     priority: Number.isFinite(entry.priority) ? Number(entry.priority) : 0,

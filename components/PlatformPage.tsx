@@ -47,7 +47,7 @@ export function PlatformPage({ platform, videos }: { platform: Platform; videos:
                 "@type": "VideoObject",
                 name: v.title,
                 description: v.caption || v.title,
-                thumbnailUrl: v.thumbnail,
+                thumbnailUrl: v.thumbnail!.startsWith("/") ? `${siteUrl}${v.thumbnail}` : v.thumbnail,
                 uploadDate: v.publishedAt,
                 url: v.watchUrl,
                 ...(v.embedUrl ? { embedUrl: v.embedUrl } : {}),
