@@ -64,7 +64,7 @@ export function VideoCard({
     <article className="group">
       <Trigger video={video} label={label} className="block w-full text-left">
         <div className={`${frame} aspect-[9/16]`}>
-          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes={sizes} priority={priority} />
+          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} videoId={video.id} sizes={sizes} priority={priority} />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40" aria-hidden />
           <span className="absolute top-2.5 left-2.5 inline-flex size-7 items-center justify-center rounded-sm bg-black/70">
             <PlatformIcon platform={video.platform} className="size-3.5" />
@@ -98,7 +98,7 @@ export function VideoRow({ video }: { video: Video }) {
     <article className="group">
       <Trigger video={video} label={label} className="grid w-full grid-cols-[42%_1fr] items-start gap-4 text-left sm:grid-cols-[14rem_1fr] sm:gap-6">
         <div className={`${frame} aspect-video`}>
-          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 640px) 224px, 42vw" />
+          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} videoId={video.id} sizes="(min-width: 640px) 224px, 42vw" />
           <PlayBadge video={video} />
         </div>
         <div className="min-w-0">
@@ -125,7 +125,7 @@ export function LandscapeCard({ video }: { video: Video }) {
     <article className="group">
       <Trigger video={video} label={label} className="block w-full text-left">
         <div className={`${frame} aspect-video`}>
-          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
+          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} videoId={video.id} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
           <PlayBadge video={video} size="lg" />
         </div>
         {date && <p className="eyebrow mt-3 text-[0.7rem] text-muted">{date}</p>}

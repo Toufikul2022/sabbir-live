@@ -116,7 +116,6 @@ function str(v: unknown): string | undefined {
 function autoThumb(platform: Platform, id: string | null) {
   if (!id) return null;
   if (platform === "youtube") return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-  if (platform === "tiktok") return `/api/tiktok-thumb/${id}`; // always fresh, see that route
   return null;
 }
 

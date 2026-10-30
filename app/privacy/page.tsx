@@ -26,8 +26,8 @@ export default function PrivacyPage() {
 
       <h2 className={h2}>Embedded videos and social media</h2>
       <p className={p}>
-        Videos on this site are played using the official embedded players of Facebook, TikTok and YouTube. Nothing is loaded from
-        those platforms until you press play (or choose to load a profile feed). Once loaded, those players are provided by the
+        Videos on this site are played using the official embedded players of Facebook, TikTok and YouTube. Facebook and YouTube players load only
+        when you press play. TikTok video covers are shown using TikTok’s player, so TikTok content loads as you scroll past them. Once loaded, those players are provided by the
         platform and are covered by its own privacy policy, which may include cookies. YouTube videos use YouTube’s
         privacy-enhanced (no-cookie) mode.
       </p>
