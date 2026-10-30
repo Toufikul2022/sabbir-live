@@ -3,6 +3,7 @@ import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PlayerProvider } from "@/components/PlayerProvider";
+import { ScrollEffects } from "@/components/ScrollEffects";
 import { profileUrl, siteConfig, siteUrl } from "@/lib/site";
 
 const description = `${siteConfig.creatorName}'s official website. ${siteConfig.hero.text}`;
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="flex min-h-dvh flex-col">
+        <ScrollEffects />
         <PlayerProvider>
           <Header facebookUrl={profileUrl("facebook")} />
           <main id="main" className="flex-1">

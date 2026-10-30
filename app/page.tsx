@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PlatformIcon, PlayIcon } from "@/components/Icons";
-import { JsonLd } from "@/components/JsonLd";
-import { SocialIcons } from "@/components/SocialIcons";
-import { Thumb } from "@/components/Thumb";
-import { container, EmptyState, FollowButton, SectionHeading, ShowMoreLink, ViewAllLink } from "@/components/ui";
-import { VideoCard, VideoRow } from "@/components/VideoCard";
 import { HeroPlayButton } from "@/components/HeroPlayButton";
+import { ArrowRightIcon, PlatformIcon, PlayIcon } from "@/components/Icons";
+import { JsonLd } from "@/components/JsonLd";
+import { Thumb } from "@/components/Thumb";
+import { Ticker } from "@/components/Ticker";
+import { container, EmptyState, FollowButton, GhostButton, SectionHeading, ShowMoreLink, ViewAllLink } from "@/components/ui";
+import { VideoCard, VideoRow } from "@/components/VideoCard";
 import { PLATFORM_ORDER, platformMeta } from "@/lib/platforms";
 import { profileUrl, siteConfig, siteUrl } from "@/lib/site";
 import { getAllVideos, type Video } from "@/lib/videos";
@@ -32,6 +32,7 @@ export default async function HomePage() {
   const ytShorts = youtube.filter((v) => v.orientation === "vertical").slice(0, 6);
   const ytVideos = youtube.filter((v) => v.orientation === "landscape").slice(0, 4);
   const counts: Record<Platform, number> = { facebook: facebook.length, tiktok: tiktok.length, youtube: youtube.length };
+  const [line1, line2] = splitHeadline(siteConfig.hero.headline);
 
   return (
     <>
@@ -53,165 +54,169 @@ export default async function HomePage() {
       />
 
       {/* ─── Hero ─── */}
-      <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-white/10">
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <div className="absolute -top-40 -left-40 size-[36rem] rounded-full bg-facebook/25 blur-[120px]" />
-          <div className="absolute -right-40 -bottom-56 size-[32rem] rounded-full bg-brand/20 blur-[120px]" />
-        </div>
-        <div className={`${container} relative grid items-center gap-10 py-10 sm:py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:py-20`}>
-          <div>
-            <p className="eyebrow flex items-center gap-2 text-white/80">
-              <span className="live-dot" aria-hidden />
-              {siteConfig.brandName} · {siteConfig.hero.eyebrow}
-            </p>
-            <h1 id="hero-title" className="mt-4 font-display text-[2.75rem] leading-[0.95] font-bold tracking-tight min-[400px]:text-5xl sm:text-6xl lg:text-7xl">
-              {siteConfig.hero.headline.split(". ").map((part, i, arr) => (
-                <span key={i} className={i === arr.length - 1 ? "block text-brand" : "block"}>
-                  {part}
-                  {i < arr.length - 1 ? "." : ""}
-                </span>
-              ))}
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-white/80 sm:text-xl">{siteConfig.hero.text}</p>
-            <div className="mt-8 flex flex-col gap-3 min-[460px]:flex-row min-[460px]:flex-wrap">
-              <a href="#latest" className="inline-flex h-13 items-center justify-center gap-2 rounded-full bg-white px-6 text-base font-bold text-black transition hover:bg-white/90">
-                <PlayIcon className="size-5" /> Watch Latest Videos
-              </a>
-              <FollowButton platform="facebook" size="lg" />
-            </div>
-            <div className="mt-8 flex items-center gap-4 text-sm text-muted">
-              <span>Also on</span>
-              <a href={profileUrl("tiktok")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-white hover:underline">
-                <PlatformIcon platform="tiktok" className="size-4" /> TikTok
-              </a>
-              <a href={profileUrl("youtube")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-white hover:underline">
-                <PlatformIcon platform="youtube" className="size-4" /> YouTube
-              </a>
-            </div>
+      <section aria-labelledby="hero-title" className="relative">
+        <div className={`${container} pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pb-20`}>
+          <div className="eyebrow flex items-center justify-between gap-4 border-y border-line py-3 text-muted">
+            <span className="flex items-center gap-2 text-white">
+              <span className="live-dot" aria-hidden /> On air · {siteConfig.creatorName}
+            </span>
+            <span className="hidden sm:inline">{siteConfig.hero.eyebrow}</span>
           </div>
 
-          <HeroFeature video={hero} />
+          <div className="grid items-end gap-10 pt-8 sm:pt-12 lg:grid-cols-[1fr_20rem] lg:gap-14 xl:grid-cols-[1fr_22rem]">
+            <div>
+              <h1 id="hero-title" className="display text-[clamp(3.4rem,17vw,9.75rem)]">
+                <span className="block overflow-hidden pb-[0.04em]">
+                  <span className="rise">{line1}</span>
+                </span>
+                <span className="block overflow-hidden pb-[0.06em]">
+                  <span className="rise text-brand [--rise-delay:120ms]">{line2}</span>
+                </span>
+              </h1>
+              <div className="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-[1fr_auto] md:items-end" data-reveal>
+                <p className="max-w-md text-lg leading-relaxed text-white/75 sm:text-xl">{siteConfig.hero.text}</p>
+                <div className="flex flex-col gap-3 min-[460px]:flex-row">
+                  <GhostButton href="#latest">
+                    <PlayIcon className="size-4" /> Watch Latest Videos
+                  </GhostButton>
+                  <FollowButton platform="facebook" size="lg" />
+                </div>
+              </div>
+            </div>
+
+            <HeroFeature video={hero} />
+          </div>
         </div>
       </section>
 
-      {/* ─── Platform strip (the reference's "ON NOW" schedule row) ─── */}
-      <nav id="latest" aria-label="Browse videos by platform" className={`${container} pt-8 sm:pt-10`}>
-        <ul className="rail md:grid md:grid-cols-3 md:overflow-visible">
+      <Ticker
+        items={[
+          "New Reels on Facebook",
+          `TikTok @${siteConfig.social.tiktok.handle}`,
+          "YouTube Shorts",
+          siteConfig.brandName,
+          "All my videos · One place",
+        ]}
+      />
+
+      {/* ─── Platform index (the reference's "ON NOW" schedule row) ─── */}
+      <nav id="latest" aria-label="Browse videos by platform" className={`${container} pt-14 sm:pt-20`}>
+        <ul className="grid border-y border-line md:grid-cols-3" data-reveal>
           {PLATFORM_ORDER.map((p, i) => (
-            <li key={p} className="w-[72vw] max-w-xs md:w-auto md:max-w-none">
+            <li key={p} className={`border-line ${i > 0 ? "border-t md:border-t-0 md:border-l" : ""}`}>
               <a
                 href={`#${p}-videos`}
-                className={`relative flex h-full min-h-28 flex-col justify-between overflow-hidden rounded-lg p-4 ring-1 ring-white/10 transition hover:ring-white/40 ${i === 0 ? "bg-gradient-to-b from-[#123a8a] to-[#0a1a3f]" : "bg-surface-3"}`}
+                className={`group btn-sweep flex h-full items-center gap-5 px-1 py-5 transition-colors duration-300 hover:text-white sm:px-5 sm:py-6 ${i === 0 ? "[--sweep:var(--color-facebook)]" : "[--sweep:var(--color-surface-3)]"}`}
               >
-                {i === 0 && <span className="absolute top-0 right-10 h-full w-0.5 bg-brand" aria-hidden />}
-                <span className={`eyebrow flex items-center gap-2 ${i === 0 ? "text-white" : "text-muted"}`}>
-                  {i === 0 ? <span className="live-dot" aria-hidden /> : <PlatformIcon platform={p} className="size-3.5" />}
-                  {i === 0 ? "Top pick · Facebook" : platformMeta[p].name}
+                <span className="display outline-text text-5xl transition group-hover:[-webkit-text-stroke-color:#fff]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="min-w-0">
+                  <span className="eyebrow flex items-center gap-2 text-muted group-hover:text-white/80">
+                    {i === 0 && <span className="live-dot" aria-hidden />}
+                    {i === 0 ? "Main channel" : platformMeta[p].name} · {counts[p] ? `${counts[p]} video${counts[p] === 1 ? "" : "s"}` : "Coming soon"}
+                  </span>
+                  <span className="display mt-1.5 block text-3xl">{platformMeta[p].name}</span>
                 </span>
-                <span className="mt-2 block font-display text-xl font-bold">
-                  Latest {platformMeta[p].videoNoun}
-                </span>
-                <span className="mt-1 text-sm text-white/70">
-                  {counts[p] ? `${counts[p]} video${counts[p] === 1 ? "" : "s"}` : "Coming soon"}
-                </span>
+                <ArrowRightIcon className="ml-auto size-5 shrink-0 text-brand transition duration-300 group-hover:translate-x-1 group-hover:text-white" />
               </a>
             </li>
           ))}
         </ul>
       </nav>
 
-      {/* ─── 1. Facebook (highest priority) ─── */}
-      <section aria-labelledby="facebook-videos-title" id="facebook-videos" className={`${container} pt-12 sm:pt-16`}>
-        <div className="rounded-3xl bg-gradient-to-b from-facebook/15 to-transparent p-4 ring-1 ring-facebook/30 sm:p-8">
-          <SectionHeading
-            id="facebook-videos-title"
-            platform="facebook"
-            eyebrow={<><span className="live-dot" aria-hidden /> Main channel</>}
-            title="Latest Facebook Reels"
-            action={<ViewAllLink href="/facebook">View all Facebook videos</ViewAllLink>}
-          />
-          {facebookRest.length ? (
-            <VideoRail videos={facebookRest} cols="md:grid-cols-3 lg:grid-cols-4" />
-          ) : (
-            <EmptyState platform="facebook" compact />
-          )}
-        </div>
+      {/* ─── 01 Facebook (highest priority) ─── */}
+      <section aria-labelledby="facebook-videos-title" id="facebook-videos" className={`${container} pt-20 sm:pt-28`}>
+        <SectionHeading
+          id="facebook-videos-title"
+          index={1}
+          label={<><PlatformIcon platform="facebook" className="size-3.5 text-facebook" /> Facebook · Main channel</>}
+          title={<>Latest <span className="text-facebook">Reels</span></>}
+          action={<ViewAllLink href="/facebook">View all</ViewAllLink>}
+        />
+        {facebookRest.length ? (
+          <VideoRail videos={facebookRest} cols="md:grid-cols-3 lg:grid-cols-4" numbered />
+        ) : (
+          <EmptyState platform="facebook" compact />
+        )}
       </section>
 
-      {/* ─── 2. TikTok ─── */}
-      <section aria-labelledby="tiktok-videos-title" id="tiktok-videos" className={`${container} pt-14 sm:pt-20`}>
+      {/* ─── 02 TikTok ─── */}
+      <section aria-labelledby="tiktok-videos-title" id="tiktok-videos" className={`${container} pt-20 sm:pt-28`}>
         <SectionHeading
           id="tiktok-videos-title"
-          platform="tiktok"
-          title="Latest TikTok Videos"
-          action={<ViewAllLink href="/tiktok">View all TikTok videos</ViewAllLink>}
+          index={2}
+          label={<><PlatformIcon platform="tiktok" className="size-3.5" /> TikTok · @{siteConfig.social.tiktok.handle}</>}
+          title="On TikTok"
+          action={<ViewAllLink href="/tiktok">View all</ViewAllLink>}
         />
         {tiktokLatest.length ? <VideoRail videos={tiktokLatest} cols="md:grid-cols-4 lg:grid-cols-6" /> : <EmptyState platform="tiktok" compact />}
       </section>
 
-      {/* ─── 3. YouTube ─── */}
-      <section aria-labelledby="youtube-videos-title" id="youtube-videos" className={`${container} pt-14 sm:pt-20`}>
+      {/* ─── 03 YouTube ─── */}
+      <section aria-labelledby="youtube-videos-title" id="youtube-videos" className={`${container} pt-20 sm:pt-28`}>
         <SectionHeading
           id="youtube-videos-title"
-          platform="youtube"
-          title="Latest on YouTube"
-          action={<ViewAllLink href="/youtube">View all YouTube videos</ViewAllLink>}
+          index={3}
+          label={<><PlatformIcon platform="youtube" className="size-3.5 text-youtube" /> YouTube · @{siteConfig.social.youtube.handle}</>}
+          title="On YouTube"
+          action={<ViewAllLink href="/youtube">View all</ViewAllLink>}
         />
         {ytShorts.length === 0 && ytVideos.length === 0 && <EmptyState platform="youtube" compact />}
         {ytShorts.length > 0 && (
-          <>
-            <h3 className="eyebrow mb-3 text-muted">Shorts</h3>
+          <div data-reveal>
+            <h3 className="eyebrow mb-4 text-muted">Shorts</h3>
             <VideoRail videos={ytShorts} cols="md:grid-cols-4 lg:grid-cols-6" />
-          </>
+          </div>
         )}
         {ytVideos.length > 0 && (
-          <>
-            <h3 className={`eyebrow mb-4 text-muted ${ytShorts.length ? "mt-10" : ""}`}>Latest videos</h3>
-            <ul className="grid gap-6 lg:grid-cols-2 lg:gap-x-10">
+          <div data-reveal>
+            <h3 className={`eyebrow mb-5 text-muted ${ytShorts.length ? "mt-14" : ""}`}>Latest videos</h3>
+            <ul className="grid gap-x-12 lg:grid-cols-2">
               {ytVideos.map((v) => (
-                <li key={v.key}>
+                <li key={v.key} className="border-t border-line py-5">
                   <VideoRow video={v} />
                 </li>
               ))}
             </ul>
             <ShowMoreLink href="/youtube">Show more</ShowMoreLink>
-          </>
+          </div>
         )}
       </section>
 
       {/* ─── About ─── */}
-      <section aria-labelledby="about-title" className={`${container} pt-20 sm:pt-28`}>
-        <div className="grid items-center gap-8 rounded-3xl bg-surface p-6 ring-1 ring-white/10 sm:p-10 md:grid-cols-[minmax(0,18rem)_1fr] md:gap-12">
-          <div className="flex aspect-square items-center justify-center rounded-2xl bg-gradient-to-br from-brand/30 via-ink to-facebook/30 p-6 ring-1 ring-white/10">
-            <Image src={logo} alt="" className="h-auto w-full" sizes="(min-width: 768px) 240px, 80vw" />
-          </div>
+      <section aria-labelledby="about-title" className={`${container} pt-24 sm:pt-36`}>
+        <div className="grid gap-10 border-t border-line pt-10 md:grid-cols-[14rem_1fr] lg:grid-cols-[18rem_1fr] lg:gap-16" data-reveal>
           <div>
             <p className="eyebrow text-brand-text">About the creator</p>
-            <h2 id="about-title" className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <div className="mt-6 hidden border border-line p-6 md:block">
+              <Image src={logo} alt="" className="h-auto w-full" sizes="240px" />
+            </div>
+          </div>
+          <div>
+            <h2 id="about-title" className="display text-5xl sm:text-7xl">
               {siteConfig.about.heading}
             </h2>
-            {siteConfig.about.paragraphs.map((p, i) => (
-              <p key={i} className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">
-                {p}
-              </p>
-            ))}
-            <div className="mt-7 flex flex-wrap items-center gap-5">
-              <SocialIcons />
-              <Link href="/contact" className="inline-flex h-11 items-center rounded-full px-5 text-sm font-bold ring-1 ring-white/30 hover:bg-white hover:text-black">
-                Work with me
-              </Link>
+            <div className="mt-8 grid gap-5 text-lg leading-relaxed text-white/75 lg:grid-cols-2 lg:gap-10">
+              {siteConfig.about.paragraphs.map((p, i) => (
+                <p key={i} className={i === 0 ? "text-xl text-white sm:text-2xl lg:col-span-2" : ""}>
+                  {p}
+                </p>
+              ))}
             </div>
+            <Link href="/contact" className="group mt-10 inline-flex items-center gap-3 font-display text-2xl font-bold tracking-wide uppercase">
+              <span className="link-sweep pb-1">Work with me</span>
+              <ArrowRightIcon className="size-5 text-brand transition-transform duration-300 group-hover:translate-x-1.5" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ─── Follow ─── */}
-      <section aria-labelledby="follow-title" className={`${container} pt-20 sm:pt-28`}>
-        <SectionHeading id="follow-title" eyebrow="Never miss a video" title="Follow Sabbir LIVE" />
-        <ul className="grid gap-4 lg:grid-cols-4">
+      <section aria-labelledby="follow-title" className={`${container} pt-24 sm:pt-36`}>
+        <SectionHeading id="follow-title" label="Never miss a video" title="Follow along" />
+        <ul className="border-b border-line" data-reveal>
           {PLATFORM_ORDER.map((p) => (
-            <li key={p} className={p === "facebook" ? "lg:col-span-2" : ""}>
-              <FollowCard platform={p} />
+            <li key={p} className="border-t border-line">
+              <FollowRow platform={p} />
             </li>
           ))}
         </ul>
@@ -220,12 +225,17 @@ export default async function HomePage() {
   );
 }
 
-function VideoRail({ videos, cols }: { videos: Video[]; cols: string }) {
+function splitHeadline(headline: string): [string, string] {
+  const i = headline.indexOf(". ");
+  return i === -1 ? [headline, ""] : [headline.slice(0, i + 1), headline.slice(i + 2)];
+}
+
+function VideoRail({ videos, cols, numbered = false }: { videos: Video[]; cols: string; numbered?: boolean }) {
   return (
-    <ul className={`rail -mx-4 px-4 md:mx-0 md:grid md:gap-5 md:overflow-visible md:px-0 ${cols}`}>
-      {videos.map((v) => (
+    <ul className={`rail -mx-4 gap-4 px-4 pt-2 md:mx-0 md:grid md:gap-x-5 md:gap-y-10 md:overflow-visible md:px-0 ${cols}`} data-reveal>
+      {videos.map((v, i) => (
         <li key={v.key} className={railItem}>
-          <VideoCard video={v} sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, 62vw" />
+          <VideoCard video={v} index={numbered ? i + 1 : undefined} sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, 62vw" />
         </li>
       ))}
     </ul>
@@ -235,38 +245,44 @@ function VideoRail({ videos, cols }: { videos: Video[]; cols: string }) {
 function HeroFeature({ video }: { video: Video | null }) {
   if (!video) {
     return (
-      <div className="mx-auto w-full max-w-[22rem]">
-        <div className="relative flex aspect-[9/16] flex-col items-center justify-center gap-6 overflow-hidden rounded-[1.25rem] bg-gradient-to-b from-facebook/60 via-facebook-deep to-ink p-8 text-center ring-1 ring-white/15">
-          <Image src={logo} alt="" className="h-auto w-4/5" sizes="280px" priority />
-          <p className="font-display text-xl font-semibold">New Reels drop on Facebook first</p>
-          <FollowButton platform="facebook" />
+      <div className="mx-auto w-full max-w-[20rem] lg:max-w-none" data-reveal>
+        <div className="relative flex aspect-[4/5] flex-col justify-between overflow-hidden border border-line bg-surface p-6 lg:aspect-[9/14]">
+          <PlatformIcon platform="facebook" className="pointer-events-none absolute -right-10 -bottom-10 size-64 text-facebook/15" />
+          <p className="eyebrow relative flex items-center gap-2 text-white">
+            <span className="live-dot" aria-hidden /> Facebook first
+          </p>
+          <div className="relative">
+            <Image src={logo} alt="" className="h-auto w-4/5" sizes="280px" priority />
+            <p className="display mt-6 text-4xl">New Reels drop on Facebook first.</p>
+            <FollowButton platform="facebook" className="mt-6" />
+          </div>
         </div>
       </div>
     );
   }
   return (
-    <div className="mx-auto w-full max-w-[22rem]">
+    <div className="group mx-auto w-full max-w-[20rem] lg:max-w-none" data-reveal>
       <p className="eyebrow mb-3 flex items-center gap-2">
         <span className="live-dot" aria-hidden /> {video.featured ? "Featured on Facebook" : "Latest on Facebook"}
       </p>
-      <div className="group relative aspect-[9/16] overflow-hidden rounded-[1.25rem] bg-surface-2 ring-1 ring-white/15">
+      <div className="relative aspect-[9/16] overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/15 transition duration-500 group-hover:ring-2 group-hover:ring-brand">
         <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : "Latest Facebook Reel thumbnail"} platform="facebook" sizes="352px" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" aria-hidden />
         <HeroPlayButton video={video} />
       </div>
-      {video.title && <h2 className="mt-4 font-display text-xl leading-snug font-bold">{video.title}</h2>}
-      {video.caption && <p className="mt-2 line-clamp-2 text-sm text-muted">{video.caption}</p>}
+      {video.title && <h2 className="mt-4 font-display text-2xl leading-tight font-semibold">{video.title}</h2>}
+      {video.caption && <p className="mt-1.5 line-clamp-2 text-sm text-muted">{video.caption}</p>}
     </div>
   );
 }
 
-const followCardStyle: Record<Platform, string> = {
-  facebook: "bg-gradient-to-br from-facebook to-[#0a3aa8]",
-  tiktok: "bg-gradient-to-br from-[#2a2a2e] to-[#111] ring-1 ring-white/10",
-  youtube: "bg-gradient-to-br from-[#3a0a10] to-[#160406] ring-1 ring-white/10",
+const followSweep: Record<Platform, string> = {
+  facebook: "[--sweep:var(--color-facebook)]",
+  tiktok: "[--sweep:var(--color-tiktok)]",
+  youtube: "[--sweep:var(--color-youtube)]",
 };
 
-function FollowCard({ platform }: { platform: Platform }) {
+function FollowRow({ platform }: { platform: Platform }) {
   const meta = platformMeta[platform];
   const social = siteConfig.social[platform];
   const handle = "handle" in social ? `@${social.handle}` : siteConfig.brandName;
@@ -275,19 +291,16 @@ function FollowCard({ platform }: { platform: Platform }) {
       href={profileUrl(platform)}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group flex h-full min-h-44 flex-col justify-between gap-6 rounded-2xl p-6 transition hover:-translate-y-0.5 ${followCardStyle[platform]}`}
+      className={`group btn-sweep flex items-center gap-4 px-1 py-6 transition-colors duration-300 sm:gap-8 sm:px-4 sm:py-8 ${followSweep[platform]}`}
     >
-      <div className="flex items-center justify-between">
-        <PlatformIcon platform={platform} className={platform === "facebook" ? "size-10" : "size-8"} />
-        <span className="eyebrow text-white/80">{platform === "facebook" ? "Main channel" : meta.videoNoun}</span>
-      </div>
-      <div>
-        <p className={`font-display font-bold ${platform === "facebook" ? "text-3xl" : "text-2xl"}`}>{meta.name}</p>
-        <p className="mt-1 text-sm text-white/80">{handle}</p>
-        <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-black">
-          {meta.follow}
-        </span>
-      </div>
+      <PlatformIcon platform={platform} className="size-7 shrink-0 sm:size-10" />
+      <span className={`display ${platform === "facebook" ? "text-6xl sm:text-8xl lg:text-9xl" : "text-5xl sm:text-7xl lg:text-8xl"}`}>{meta.name}</span>
+      <span className="ml-auto hidden text-right sm:block">
+        <span className="eyebrow block text-muted transition-colors group-hover:text-white/85">{platform === "facebook" ? "Main channel" : meta.videoNoun}</span>
+        <span className="mt-1 block font-semibold">{handle}</span>
+      </span>
+      <ArrowRightIcon className="ml-auto size-7 shrink-0 -rotate-45 text-brand transition duration-500 group-hover:rotate-0 group-hover:text-white sm:ml-0 sm:size-9" />
+      <span className="sr-only">{meta.follow}</span>
     </a>
   );
 }

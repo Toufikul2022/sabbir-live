@@ -30,7 +30,7 @@ export function Thumb({
   priority?: boolean;
 }) {
   if (!src) return <Poster platform={platform} />;
-  const cls = "absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.04]";
+  const cls = "absolute inset-0 size-full object-cover transition duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.07]";
   if (canOptimize(src)) {
     return <Image src={src} alt={alt} fill sizes={sizes} className={cls} priority={priority} />;
   }
@@ -39,9 +39,9 @@ export function Thumb({
 }
 
 const posterBg: Record<Platform, string> = {
-  facebook: "from-facebook/70 via-facebook-deep to-ink",
-  tiktok: "from-tiktok/55 via-[#1b0710] to-ink",
-  youtube: "from-youtube/55 via-[#1a0306] to-ink",
+  facebook: "from-facebook-deep to-ink",
+  tiktok: "from-[#2a0711] to-ink",
+  youtube: "from-[#2a0408] to-ink",
 };
 
 export function Poster({ platform }: { platform: Platform }) {

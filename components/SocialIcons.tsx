@@ -13,7 +13,7 @@ export function SocialIcons({ size = "md" }: { size?: "sm" | "md" }) {
             href={profileUrl(p)}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${dim} inline-flex items-center justify-center rounded-full bg-white text-black transition hover:scale-105 hover:bg-white/90`}
+            className={`${dim} inline-flex items-center justify-center rounded-full bg-white text-black transition duration-300 hover:-translate-y-0.5 hover:bg-brand hover:text-white`}
           >
             <PlatformIcon platform={p} className={size === "sm" ? "size-4" : "size-5"} />
             <span className="sr-only">Sabbir LIVE on {platformMeta[p].name}</span>

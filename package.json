@@ -2,7 +2,7 @@
   "name": "sabbir-live",
   "version": "1.0.0",
   "private": true,
-  "description": "Sabbir LIVE \u2014 official creator website bringing Facebook, TikTok and YouTube videos into one place.",
+  "description": "Sabbir LIVE — official creator website bringing Facebook, TikTok and YouTube videos into one place.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,8 +15,9 @@
     "node": ">=20.9"
   },
   "dependencies": {
-    "@fontsource-variable/inter": "^5.3.0",
-    "@fontsource-variable/jost": "^5.3.0",
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "next": "^16.4.2",
     "nodemailer": "^10.1.7",
     "react": "^19.3.1",

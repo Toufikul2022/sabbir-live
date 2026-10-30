@@ -8,17 +8,18 @@ import { ProfileEmbed } from "./ProfileEmbed";
 import { container, EmptyState, FollowButton, SectionHeading } from "./ui";
 import { VideoGrid } from "./VideoGrid";
 
-const heroGlow: Record<Platform, string> = {
-  facebook: "from-facebook/35",
-  tiktok: "from-tiktok/25",
-  youtube: "from-youtube/25",
+const heroIcon: Record<Platform, string> = {
+  facebook: "text-facebook/[0.12]",
+  tiktok: "text-tiktok/[0.10]",
+  youtube: "text-youtube/[0.10]",
 };
+const accent: Record<Platform, string> = { facebook: "text-facebook", tiktok: "text-tiktok", youtube: "text-brand" };
 
 const verticalTitle: Record<Platform, string> = { facebook: "Reels", tiktok: "Videos", youtube: "Shorts" };
 const intro: Record<Platform, string> = {
-  facebook: "My main channel. Reels and videos from the Sabbir LIVE Facebook Page — newest first.",
-  tiktok: "Short, vertical videos from TikTok — tap any video to watch it here.",
-  youtube: "YouTube Shorts and full-length videos from the Sabbir LIVE channel.",
+  facebook: "My main channel. Every Reel and video from the Sabbir LIVE Page, newest first.",
+  tiktok: "Quick, vertical and straight from the phone. Tap any clip to watch it right here.",
+  youtube: "Shorts up top, longer videos below. All from the Sabbir LIVE channel.",
 };
 
 export function PlatformPage({ platform, videos }: { platform: Platform; videos: Video[] }) {
@@ -56,42 +57,50 @@ export function PlatformPage({ platform, videos }: { platform: Platform; videos:
         />
       )}
 
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${heroGlow[platform]} via-transparent to-transparent`} aria-hidden />
-        <div className={`${container} relative flex flex-col gap-6 py-10 sm:py-14 md:flex-row md:items-end md:justify-between`}>
-          <div>
-            <p className="eyebrow flex items-center gap-2 text-white/80">
-              <PlatformIcon platform={platform} className="size-4" />
-              {meta.name}
-              {handle && <span className="font-semibold tracking-normal normal-case">· {handle}</span>}
-            </p>
-            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">{meta.pageTitle}</h1>
-            <p className="mt-3 max-w-2xl text-base text-white/80 sm:text-lg">{intro[platform]}</p>
+      <section className="relative overflow-hidden">
+        <PlatformIcon platform={platform} className={`pointer-events-none absolute -top-10 -right-16 size-[22rem] sm:size-[30rem] ${heroIcon[platform]}`} />
+        <div className={`${container} relative pt-6 pb-10 sm:pt-10 sm:pb-14`}>
+          <div className="eyebrow flex items-center justify-between gap-4 border-y border-line py-3 text-muted">
+            <span className="flex items-center gap-2 text-white">
+              <PlatformIcon platform={platform} className="size-3.5" /> {meta.name}
+            </span>
+            {handle && <span>{handle}</span>}
           </div>
-          <FollowButton platform={platform} size="lg" className="self-start md:self-auto" />
+          <h1 className="display mt-8 text-[clamp(3.2rem,14vw,8.5rem)] sm:mt-12">
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="rise">{meta.name}</span>
+            </span>
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span className={`rise [--rise-delay:120ms] ${accent[platform]}`}>{verticalTitle[platform]}</span>
+            </span>
+          </h1>
+          <div className="mt-8 flex flex-col gap-6 border-t border-line pt-8 md:flex-row md:items-end md:justify-between" data-reveal>
+            <p className="max-w-xl text-lg leading-relaxed text-white/75 sm:text-xl">{intro[platform]}</p>
+            <FollowButton platform={platform} size="lg" className="self-start md:self-auto" />
+          </div>
         </div>
       </section>
 
-      <div className={`${container} pt-10 sm:pt-14`}>
+      <div className={`${container} pt-6 sm:pt-10`}>
         {videos.length === 0 && <EmptyState platform={platform} />}
 
         {vertical.length > 0 && (
           <section aria-labelledby="vertical-title">
-            <SectionHeading id="vertical-title" title={`Latest ${verticalTitle[platform]}`} eyebrow={`${vertical.length} video${vertical.length === 1 ? "" : "s"}`} />
+            <SectionHeading id="vertical-title" index={1} title={`Latest ${verticalTitle[platform]}`} label={`${vertical.length} video${vertical.length === 1 ? "" : "s"} · newest first`} />
             <VideoGrid videos={vertical} />
           </section>
         )}
 
         {landscape.length > 0 && (
           <section aria-labelledby="landscape-title" className={vertical.length ? "pt-16" : ""}>
-            <SectionHeading id="landscape-title" title={platform === "youtube" ? "Videos" : "More videos"} eyebrow={`${landscape.length} video${landscape.length === 1 ? "" : "s"}`} />
+            <SectionHeading id="landscape-title" index={vertical.length ? 2 : 1} title={platform === "youtube" ? "Full videos" : "More videos"} label={`${landscape.length} video${landscape.length === 1 ? "" : "s"}`} />
             <VideoGrid videos={landscape} layout="landscape" pageSize={9} />
           </section>
         )}
 
         {platform === "tiktok" && (
           <section aria-labelledby="tiktok-feed-title" className="pt-16">
-            <SectionHeading id="tiktok-feed-title" title="Straight from TikTok" eyebrow={handle ?? undefined} />
+            <SectionHeading id="tiktok-feed-title" title="Straight from TikTok" label={handle ?? undefined} />
             <ProfileEmbed platform="tiktok" target={siteConfig.social.tiktok.handle} label={`See the latest TikToks from ${handle}`} />
           </section>
         )}

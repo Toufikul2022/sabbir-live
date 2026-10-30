@@ -82,11 +82,11 @@ export function ContactForm({ facebookUrl }: { facebookUrl: string }) {
 
   if (status.state === "sent") {
     return (
-      <div role="status" className="flex flex-col items-start gap-4 rounded-2xl bg-surface p-8 ring-1 ring-emerald-400/40">
+      <div role="status" className="flex flex-col items-start gap-4 border border-emerald-400/40 bg-surface p-8">
         <span className="inline-flex size-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-300">
           <CheckIcon className="size-6" />
         </span>
-        <h2 className="font-display text-2xl font-bold">Thanks{status.name ? `, ${status.name}` : ""}! Your message has been sent.</h2>
+        <h2 className="display text-4xl">Thanks{status.name ? `, ${status.name}` : ""}! Your message has been sent.</h2>
         <p className="text-white/80">I’ll get back to you as soon as I can.</p>
         <button
           type="button"
@@ -103,13 +103,13 @@ export function ContactForm({ facebookUrl }: { facebookUrl: string }) {
   }
 
   const input =
-    "mt-2 block w-full rounded-xl border-0 bg-surface-2 px-4 py-3 text-base text-white ring-1 ring-white/15 placeholder:text-white/40 focus:ring-2 focus:ring-tiktok-cyan focus:outline-none aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-brand-text";
+    "mt-2 block w-full rounded-sm border-0 bg-surface-2 px-4 py-3 text-base text-white ring-1 ring-white/15 placeholder:text-white/40 focus:ring-2 focus:ring-tiktok-cyan focus:outline-none aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-brand-text";
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5 rounded-2xl bg-surface p-5 ring-1 ring-white/10 sm:p-8">
+    <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-6 border border-line bg-surface p-5 sm:p-8">
       {FIELDS.map((f) => (
         <div key={f.name}>
-          <label htmlFor={f.name} className="text-sm font-semibold">
+          <label htmlFor={f.name} className="eyebrow text-white/85">
             {f.label} <span className="text-brand-text" aria-hidden>*</span>
           </label>
           <input
@@ -131,7 +131,7 @@ export function ContactForm({ facebookUrl }: { facebookUrl: string }) {
         </div>
       ))}
       <div>
-        <label htmlFor="message" className="text-sm font-semibold">
+        <label htmlFor="message" className="eyebrow text-white/85">
           Message <span className="text-brand-text" aria-hidden>*</span>
         </label>
         <textarea
@@ -186,7 +186,7 @@ export function ContactForm({ facebookUrl }: { facebookUrl: string }) {
       <button
         type="submit"
         disabled={status.state === "sending"}
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-strong px-8 text-base font-bold text-white transition hover:brightness-110 disabled:opacity-60 sm:w-auto"
+        className="btn-sweep inline-flex h-13 w-full items-center justify-center gap-2 rounded-full bg-brand-strong px-9 text-base font-semibold text-white transition-colors duration-300 [--sweep:#ffffff] hover:text-black disabled:opacity-60 sm:w-auto"
       >
         {status.state === "sending" ? (
           <>

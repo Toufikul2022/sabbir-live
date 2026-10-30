@@ -2,7 +2,7 @@
 
 import { platformMeta } from "@/lib/platforms";
 import type { Video } from "@/lib/videos";
-import { ExternalIcon, PlatformIcon, PlayCircleIcon, PlayIcon } from "./Icons";
+import { ExternalIcon, PlatformIcon, PlayIcon } from "./Icons";
 import { usePlayer } from "./PlayerProvider";
 import { Thumb } from "./Thumb";
 
@@ -10,7 +10,7 @@ const KIND_LABEL = { reel: "Reel", short: "Short", video: "Video" } as const;
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
-  return new Date(iso).toLocaleDateString("en", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  return new Date(iso).toLocaleDateString("en", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
 }
 
 /** Opens the in-page player when the video can be embedded, otherwise links out to the platform. */
@@ -30,29 +30,59 @@ function Trigger({ video, label, className, children }: { video: Video; label: s
   );
 }
 
-/** Portrait, Reel-style card (9:16). */
-export function VideoCard({ video, sizes = "(min-width: 1024px) 260px, (min-width: 640px) 33vw, 50vw", priority = false }: { video: Video; sizes?: string; priority?: boolean }) {
+const frame =
+  "relative overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/10 transition duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1.5 group-hover:ring-2 group-hover:ring-brand group-hover:shadow-[0_18px_40px_-12px_rgb(236_28_36/0.45)]";
+
+function PlayBadge({ video, size = "md" }: { video: Video; size?: "md" | "lg" }) {
+  const dim = size === "lg" ? "size-16" : "size-12";
+  return (
+    <span
+      className={`absolute top-1/2 left-1/2 inline-flex ${dim} -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 ring-1 ring-white/50 backdrop-blur-sm transition duration-500 ease-[var(--ease-out-expo)] group-hover:scale-110 group-hover:bg-brand group-hover:ring-brand`}
+      aria-hidden
+    >
+      {video.embedUrl ? <PlayIcon className="ml-0.5 size-5" /> : <ExternalIcon className="size-5" />}
+    </span>
+  );
+}
+
+/** Portrait, Reel-style card (9:16) with the title set underneath. */
+export function VideoCard({
+  video,
+  index,
+  sizes = "(min-width: 1024px) 260px, (min-width: 640px) 33vw, 50vw",
+  priority = false,
+}: {
+  video: Video;
+  index?: number;
+  sizes?: string;
+  priority?: boolean;
+}) {
   const meta = platformMeta[video.platform];
   const label = video.title || `${meta.name} ${KIND_LABEL[video.kind].toLowerCase()}`;
   const date = formatDate(video.publishedAt);
   return (
-    <article className="group relative">
+    <article className="group">
       <Trigger video={video} label={label} className="block w-full text-left">
-        <div className={`relative overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/10 transition group-hover:ring-white/30 aspect-[9/16]`}>
+        <div className={`${frame} aspect-[9/16]`}>
           <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes={sizes} priority={priority} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/30" aria-hidden />
-          <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-full bg-black/65 px-2.5 py-1 text-[0.7rem] font-bold backdrop-blur-sm">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40" aria-hidden />
+          <span className="absolute top-2.5 left-2.5 inline-flex size-7 items-center justify-center rounded-sm bg-black/70">
             <PlatformIcon platform={video.platform} className="size-3.5" />
-            {meta.name}
+            <span className="sr-only">{meta.name}</span>
           </span>
-          <span className="eyebrow absolute top-3 right-3 text-[0.65rem] text-white/80">{KIND_LABEL[video.kind]}</span>
-          <span className="absolute top-1/2 left-1/2 inline-flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 backdrop-blur-md transition group-hover:scale-110 group-hover:bg-brand" aria-hidden>
-            {video.embedUrl ? <PlayIcon className="ml-0.5 size-6" /> : <ExternalIcon className="size-5" />}
-          </span>
-          <div className="absolute inset-x-0 bottom-0 p-3">
-            {video.title && <h3 className="line-clamp-2 text-sm leading-snug font-semibold text-white">{video.title}</h3>}
-            {date && <p className="mt-1 text-xs text-white/70">{date}</p>}
-          </div>
+          {index !== undefined && (
+            <span className="display absolute right-2.5 bottom-2 text-4xl text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" aria-hidden>
+              {String(index).padStart(2, "0")}
+            </span>
+          )}
+          <span className="eyebrow absolute top-3 right-3 text-[0.62rem] text-white/85">{KIND_LABEL[video.kind]}</span>
+          <PlayBadge video={video} />
+        </div>
+        <div className="mt-3 pr-2">
+          {date && <p className="eyebrow text-[0.65rem] text-muted">{date}</p>}
+          <h3 className="mt-1 line-clamp-2 font-display text-lg leading-tight font-semibold">
+            <span className="link-sweep">{label}</span>
+          </h3>
         </div>
       </Trigger>
     </article>
@@ -66,25 +96,27 @@ export function VideoRow({ video }: { video: Video }) {
   const date = formatDate(video.publishedAt);
   return (
     <article className="group">
-      <Trigger video={video} label={label} className="grid w-full grid-cols-[42%_1fr] items-start gap-4 text-left sm:grid-cols-[15rem_1fr]">
-        <div className="relative aspect-video overflow-hidden rounded-lg bg-surface-2 ring-1 ring-white/10">
-          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 640px) 240px, 42vw" />
-          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 text-sm font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-            <PlayCircleIcon className="size-5" />
-            {meta.name}
-          </span>
+      <Trigger video={video} label={label} className="grid w-full grid-cols-[42%_1fr] items-start gap-4 text-left sm:grid-cols-[14rem_1fr] sm:gap-6">
+        <div className={`${frame} aspect-video`}>
+          <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 640px) 224px, 42vw" />
+          <PlayBadge video={video} />
         </div>
-        <div className="min-w-0 pt-0.5">
-          <h3 className="line-clamp-3 font-display text-base leading-snug font-semibold group-hover:underline sm:text-lg">{label}</h3>
-          {video.caption && <p className="mt-1.5 hidden text-sm text-muted sm:line-clamp-2">{video.caption}</p>}
-          {date && <p className="mt-1.5 text-xs text-muted">{date}</p>}
+        <div className="min-w-0">
+          <p className="eyebrow text-[0.65rem] text-muted">
+            {meta.name}
+            {date && ` · ${date}`}
+          </p>
+          <h3 className="mt-1.5 line-clamp-3 font-display text-xl leading-tight font-semibold sm:text-2xl">
+            <span className="link-sweep">{label}</span>
+          </h3>
+          {video.caption && <p className="mt-2 hidden text-sm text-muted sm:line-clamp-2">{video.caption}</p>}
         </div>
       </Trigger>
     </article>
   );
 }
 
-/** 16:9 grid card for regular YouTube videos. */
+/** 16:9 grid card for regular videos. */
 export function LandscapeCard({ video }: { video: Video }) {
   const meta = platformMeta[video.platform];
   const label = video.title || `${meta.name} video`;
@@ -92,14 +124,14 @@ export function LandscapeCard({ video }: { video: Video }) {
   return (
     <article className="group">
       <Trigger video={video} label={label} className="block w-full text-left">
-        <div className="relative aspect-video overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/10 transition group-hover:ring-white/30">
+        <div className={`${frame} aspect-video`}>
           <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
-          <span className="absolute top-1/2 left-1/2 inline-flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 backdrop-blur-md transition group-hover:scale-110 group-hover:bg-brand" aria-hidden>
-            <PlayIcon className="ml-0.5 size-6" />
-          </span>
+          <PlayBadge video={video} size="lg" />
         </div>
-        <h3 className="mt-3 line-clamp-2 font-display text-lg leading-snug font-semibold group-hover:underline">{label}</h3>
-        {date && <p className="mt-1 text-xs text-muted">{date}</p>}
+        {date && <p className="eyebrow mt-3 text-[0.65rem] text-muted">{date}</p>}
+        <h3 className="mt-1 line-clamp-2 font-display text-xl leading-tight font-semibold">
+          <span className="link-sweep">{label}</span>
+        </h3>
       </Trigger>
     </article>
   );

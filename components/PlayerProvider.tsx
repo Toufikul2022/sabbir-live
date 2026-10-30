@@ -52,7 +52,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         className="m-auto max-h-[100dvh] w-full max-w-none bg-transparent p-0 text-white backdrop:bg-black/85 sm:max-h-[95dvh] sm:w-auto"
       >
         {video && meta && (
-          <div className={`mx-auto flex flex-col gap-3 rounded-2xl bg-ink p-3 ring-1 ring-white/10 sm:p-4 ${vertical ? "w-[min(100vw,26rem)] sm:w-[min(92vw,26rem)]" : "w-[min(100vw,60rem)] sm:w-[min(94vw,60rem)]"}`}>
+          <div className={`mx-auto flex flex-col gap-3 rounded-md bg-ink p-3 ring-1 ring-white/10 sm:p-4 ${vertical ? "w-[min(100vw,26rem)] sm:w-[min(92vw,26rem)]" : "w-[min(100vw,60rem)] sm:w-[min(94vw,60rem)]"}`}>
             <div className="flex items-start gap-3">
               <span className="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-bold">
                 <PlatformIcon platform={video.platform} className="size-3.5" />
@@ -73,7 +73,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
             </div>
 
             <div
-              className={`relative overflow-hidden rounded-xl bg-surface-2 ${vertical ? "mx-auto aspect-[9/16] h-[min(78dvh,46rem)] max-w-full" : "aspect-video w-full"}`}
+              className={`relative overflow-hidden rounded-sm bg-surface-2 ${vertical ? "mx-auto aspect-[9/16] h-[min(78dvh,46rem)] max-w-full" : "aspect-video w-full"}`}
             >
               {!loaded && (
                 <div className="absolute inset-0 flex items-center justify-center" role="status">

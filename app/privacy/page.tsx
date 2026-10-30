@@ -11,11 +11,11 @@ export const metadata = pageMetadata({
 // Describes what this website actually does. Review it (and add a contact
 // email in content/site.json) before launch; it is not legal advice.
 export default function PrivacyPage() {
-  const h2 = "mt-10 font-display text-2xl font-bold";
+  const h2 = "display mt-12 text-3xl";
   const p = "mt-3 text-white/80";
   return (
     <article className={`${container} max-w-3xl py-12 sm:py-16`}>
-      <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">Privacy Policy</h1>
+      <h1 className="display text-6xl sm:text-8xl">Privacy Policy</h1>
       <p className="mt-3 text-sm text-muted">Applies to this website, operated by {siteConfig.creatorName} ({siteConfig.brandName}).</p>
 
       <h2 className={h2}>Contact form</h2>
