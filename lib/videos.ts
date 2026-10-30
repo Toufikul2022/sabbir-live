@@ -61,7 +61,7 @@ async function fetchJson(url: string): Promise<{ status: number; body: Record<st
  * vm.tiktok.com) to find the canonical video URL. Best effort: returns null
  * if the platform doesn't reveal it.
  */
-async function resolveShareUrl(url: string): Promise<string | null> {
+export async function resolveShareUrl(url: string): Promise<string | null> {
   let current = url;
   for (let hop = 0; hop < 5; hop++) {
     let location: string | null;
@@ -89,7 +89,7 @@ async function resolveShareUrl(url: string): Promise<string | null> {
 
 type Enrichment = { title?: string; thumbnail?: string; unavailable?: boolean; noEmbed?: boolean };
 
-async function enrich(platform: Platform, watchUrl: string): Promise<Enrichment> {
+export async function enrich(platform: Platform, watchUrl: string): Promise<Enrichment> {
   if (platform === "youtube") {
     const { status, body } = await fetchJson(
       `https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(watchUrl)}`,

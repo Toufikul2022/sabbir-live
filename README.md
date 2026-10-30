@@ -10,7 +10,8 @@ The official website for **Sabbir Ahmed (Sabbir LIVE)**. It brings Facebook, Tik
 | YouTube | `/youtube` | Shorts grid (portrait) and regular videos grid (16:9) |
 | Contact | `/contact` | Contact form (Full Name, Email, Subject, Message) and social links |
 | Privacy | `/privacy` | Privacy policy describing what the site actually does |
-| Admin | `/admin` | Content manager for adding, editing, featuring and removing videos |
+| Manage | `/manage` | Password-protected page to add, feature and remove TikTok videos from a phone |
+| Admin | `/admin` | Full content manager (all platforms, site text) |
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Sveltia CMS (Git-based, free) · Resend or SMTP for email.
 There is no database or login system on the website itself. All content is stored as two JSON files in the repository.
@@ -93,6 +94,26 @@ Share links (`fb.watch/…`, `facebook.com/share/r/…`, `vm.tiktok.com/…`) ar
 
 **Deleted, private or region-locked videos:** YouTube and TikTok videos that the platform reports as deleted or private are hidden automatically. Every player also has a "Watch on …" link as a fallback.
 
+### Adding TikTok videos from a phone (`/manage`), the easiest way
+
+Made for the owner: no coding and no GitHub account needed.
+
+1. Open **`https://sabbir-live.vercel.app/manage`** and log in with the password.
+2. In the TikTok app, open the video and tap **Share → Copy link**.
+3. Back on the page, tap **Paste**, then **Add video**.
+
+The video appears on the website in about a minute. The title and upload date are filled in automatically. The same page lists every TikTok on the site, with **Show first** and **Remove** buttons (removing only hides it from the website, not from TikTok).
+
+**One-time setup (done by whoever manages Vercel):**
+
+1. Create a GitHub **fine-grained personal access token**: GitHub → Settings → Developer settings → Fine-grained tokens → *Generate new token*. Under repository access, choose **Only select repositories → `sabbir-live`**; under permissions, set **Contents → Read and write**. Copy the token.
+2. In Vercel → **Settings → Environment Variables**, add:
+   - `MANAGE_PASSWORD`: a strong password to give the owner
+   - `GITHUB_TOKEN`: the token from step 1
+3. Redeploy (Deployments → ⋯ → Redeploy).
+
+How it works: each change is saved as a commit to `content/videos.json`, which triggers Vercel to redeploy. Login is protected by the password, with a secure cookie that lasts 30 days and a limit on repeated wrong guesses. Changing `MANAGE_PASSWORD` logs everyone out.
+
 ### Using the admin panel (no code editing)
 
 `/admin` runs [Sveltia CMS](https://sveltiacms.app). It edits the same JSON files and saves each change as a commit to GitHub, which triggers a redeploy.
@@ -165,7 +186,7 @@ scripts/            check-content.mjs
 - [ ] **Add real videos**: no video URLs were supplied, so the site launches with friendly empty states and Follow buttons.
 - [ ] **Configure the contact form**: Resend or SMTP (§5).
 - [ ] **Set `NEXT_PUBLIC_SITE_URL`** to the final domain.
-- [ ] **Set `backend.repo`** in `public/admin/config.yml` and create a GitHub token for the admin.
+- [ ] **Set `MANAGE_PASSWORD` and `GITHUB_TOKEN`** in Vercel so the owner can add TikToks at `/manage`.
 - [ ] *Optional:* YouTube channel ID for automatic YouTube updates.
 - [ ] *Optional:* full Facebook Page address (`social.facebook.pageUrl`) for the live Page feed. The supplied link `facebook.com/share/19HjXcQMge/` is a share link: it works for Follow buttons, but Facebook's Page Plugin needs the Page's real address.
 - [ ] *Optional:* Facebook Page token for automatic Facebook updates (§4).
