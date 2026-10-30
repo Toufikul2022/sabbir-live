@@ -66,7 +66,7 @@ export function PlatformPage({ platform, videos }: { platform: Platform; videos:
             </span>
             {handle && <span>{handle}</span>}
           </div>
-          <h1 className="display mt-8 text-[clamp(3.2rem,14vw,8.5rem)] sm:mt-12">
+          <h1 className="display mt-8 text-hero sm:mt-12">
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="rise">{meta.name}</span>
             </span>

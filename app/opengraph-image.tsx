@@ -25,7 +25,6 @@ export default async function OpengraphImage() {
           color: "#fff",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} width={760} height={160} alt="" />
         <div style={{ fontSize: 64, fontWeight: 700, letterSpacing: -1 }}>{siteConfig.hero.headline}</div>
         <div style={{ fontSize: 30, color: "#c8c8cc" }}>Facebook · TikTok · YouTube</div>

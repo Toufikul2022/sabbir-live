@@ -49,7 +49,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         onClose={onClose}
         onClick={(e) => e.target === dialogRef.current && close()}
         aria-labelledby="player-title"
-        className="m-auto max-h-[100dvh] w-full max-w-none bg-transparent p-0 text-white backdrop:bg-black/85 sm:max-h-[95dvh] sm:w-auto"
+        className="m-auto max-h-[100dvh] w-full max-w-none bg-transparent p-0 text-white sm:max-h-[95dvh] sm:w-auto"
       >
         {video && meta && (
           <div className={`mx-auto flex flex-col gap-3 rounded-md bg-ink p-3 ring-1 ring-white/10 sm:p-4 ${vertical ? "w-[min(100vw,26rem)] sm:w-[min(92vw,26rem)]" : "w-[min(100vw,60rem)] sm:w-[min(94vw,60rem)]"}`}>

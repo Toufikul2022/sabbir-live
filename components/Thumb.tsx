@@ -34,7 +34,6 @@ export function Thumb({
   if (canOptimize(src)) {
     return <Image src={src} alt={alt} fill sizes={sizes} className={cls} priority={priority} />;
   }
-  // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt={alt} className={cls} loading={priority ? "eager" : "lazy"} decoding="async" />;
 }
 
@@ -44,7 +43,7 @@ const posterBg: Record<Platform, string> = {
   youtube: "from-[#2a0408] to-ink",
 };
 
-export function Poster({ platform }: { platform: Platform }) {
+function Poster({ platform }: { platform: Platform }) {
   return (
     <div className={`absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-b ${posterBg[platform]} p-4`}>
       <PlatformIcon platform={platform} className="size-10 text-white/25" />

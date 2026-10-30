@@ -15,7 +15,7 @@ export default function PrivacyPage() {
   const p = "mt-3 text-white/80";
   return (
     <article className={`${container} max-w-3xl py-12 sm:py-16`}>
-      <h1 className="display text-6xl sm:text-8xl">Privacy Policy</h1>
+      <h1 className="display text-hero">Privacy Policy</h1>
       <p className="mt-3 text-sm text-muted">Applies to this website, operated by {siteConfig.creatorName} ({siteConfig.brandName}).</p>
 
       <h2 className={h2}>Contact form</h2>

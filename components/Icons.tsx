@@ -28,13 +28,6 @@ export const PlayIcon = (p: P) => (
   </svg>
 );
 
-export const PlayCircleIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...base} {...p}>
-    <circle cx="12" cy="12" r="10" />
-    <path d="M10 8.5v7l5.5-3.5L10 8.5Z" fill="currentColor" stroke="none" />
-  </svg>
-);
-
 const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
 
 export const MenuIcon = (p: P) => (

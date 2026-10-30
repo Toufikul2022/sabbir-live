@@ -18,7 +18,7 @@ export default function ContactPage() {
         <p className="eyebrow flex items-center gap-2 text-white/80">
           <span className="live-dot" aria-hidden /> Contact
         </p>
-        <h1 className="display mt-6 text-[clamp(3.4rem,13vw,7rem)]">
+        <h1 className="display mt-6 text-hero">
           <span className="block overflow-hidden pb-[0.05em]"><span className="rise">Get in</span></span>
           <span className="block overflow-hidden pb-[0.06em]"><span className="rise text-brand [--rise-delay:120ms]">touch</span></span>
         </h1>

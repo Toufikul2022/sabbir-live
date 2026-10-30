@@ -30,7 +30,7 @@ export function VideoGrid({ videos, pageSize = 12, layout = "portrait" }: { vide
             onClick={() => setVisible((n) => n + pageSize)}
             className="inline-flex min-h-12 items-center gap-2 px-4 font-display text-lg font-bold tracking-wide uppercase hover:text-brand-text"
           >
-            Show more <ChevronDownIcon className="size-5 text-facebook" />
+            Show more <ChevronDownIcon className="size-5 text-brand" />
             <span className="sr-only">({remaining} more videos)</span>
           </button>
         </div>

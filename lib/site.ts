@@ -1,9 +1,7 @@
 import site from "@/content/site.json";
 import type { Platform } from "./video-url";
 
-export type SiteConfig = typeof site;
-
-export const siteConfig: SiteConfig = site;
+export const siteConfig = site;
 
 // NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is detected automatically.
 export const siteUrl = (

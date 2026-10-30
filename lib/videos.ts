@@ -1,7 +1,6 @@
 import "server-only";
 import { cache } from "react";
 import data from "@/content/videos.json";
-import { PLATFORM_ORDER } from "./platforms";
 import { youtubeChannelId } from "./site";
 import { fetchFacebookVideos } from "./sync/facebook";
 import { fetchYouTubeFeed } from "./sync/youtube";
@@ -165,7 +164,7 @@ function normalizeDate(v: unknown): string | null {
 }
 
 /** Featured first, then display priority (higher first), then newest first. */
-export function compareVideos(a: Video, b: Video) {
+function compareVideos(a: Video, b: Video) {
   if (a.featured !== b.featured) return a.featured ? -1 : 1;
   if (a.priority !== b.priority) return b.priority - a.priority;
   return (b.publishedAt ?? "").localeCompare(a.publishedAt ?? "");
@@ -196,7 +195,3 @@ export async function getVideosByPlatform(platform: Platform) {
   return (await getAllVideos()).filter((v) => v.platform === platform);
 }
 
-export async function getVideoCounts() {
-  const all = await getAllVideos();
-  return Object.fromEntries(PLATFORM_ORDER.map((p) => [p, all.filter((v) => v.platform === p).length])) as Record<Platform, number>;
-}

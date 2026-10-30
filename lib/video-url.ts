@@ -34,7 +34,7 @@ export function youtubeEmbedUrl(id: string) {
   return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
 }
 
-export function tiktokEmbedUrl(id: string) {
+function tiktokEmbedUrl(id: string) {
   return `https://www.tiktok.com/player/v1/${id}?autoplay=1&rel=0&description=1&music_info=1`;
 }
 

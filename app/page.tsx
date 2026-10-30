@@ -65,7 +65,7 @@ export default async function HomePage() {
 
           <div className="grid items-end gap-10 pt-8 sm:pt-12 lg:grid-cols-[1fr_20rem] lg:gap-14 xl:grid-cols-[1fr_22rem]">
             <div>
-              <h1 id="hero-title" className="display text-[clamp(3.4rem,17vw,9.75rem)]">
+              <h1 id="hero-title" className="display text-hero">
                 <span className="block overflow-hidden pb-[0.04em]">
                   <span className="rise">{line1}</span>
                 </span>
@@ -192,12 +192,12 @@ export default async function HomePage() {
             </div>
           </div>
           <div>
-            <h2 id="about-title" className="display text-5xl sm:text-7xl">
+            <h2 id="about-title" className="display text-title">
               {siteConfig.about.heading}
             </h2>
-            <div className="mt-8 grid gap-5 text-lg leading-relaxed text-white/75 lg:grid-cols-2 lg:gap-10">
+            <div className="mt-8 max-w-2xl space-y-5 text-lg leading-relaxed text-white/75">
               {siteConfig.about.paragraphs.map((p, i) => (
-                <p key={i} className={i === 0 ? "text-xl text-white sm:text-2xl lg:col-span-2" : ""}>
+                <p key={i} className={i === 0 ? "text-xl leading-snug text-white sm:text-2xl" : ""}>
                   {p}
                 </p>
               ))}
@@ -294,7 +294,7 @@ function FollowRow({ platform }: { platform: Platform }) {
       className={`group btn-sweep flex items-center gap-4 px-1 py-6 transition-colors duration-300 sm:gap-8 sm:px-4 sm:py-8 ${followSweep[platform]}`}
     >
       <PlatformIcon platform={platform} className="size-7 shrink-0 sm:size-10" />
-      <span className={`display ${platform === "facebook" ? "text-6xl sm:text-8xl lg:text-9xl" : "text-5xl sm:text-7xl lg:text-8xl"}`}>{meta.name}</span>
+      <span className={`display ${platform === "facebook" ? "text-mega" : "text-title"}`}>{meta.name}</span>
       <span className="ml-auto hidden text-right sm:block">
         <span className="eyebrow block text-muted transition-colors group-hover:text-white/85">{platform === "facebook" ? "Main channel" : meta.videoNoun}</span>
         <span className="mt-1 block font-semibold">{handle}</span>

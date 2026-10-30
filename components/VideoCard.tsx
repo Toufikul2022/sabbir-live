@@ -75,12 +75,12 @@ export function VideoCard({
               {String(index).padStart(2, "0")}
             </span>
           )}
-          <span className="eyebrow absolute top-3 right-3 text-[0.62rem] text-white/85">{KIND_LABEL[video.kind]}</span>
+          <span className="eyebrow absolute top-3 right-3 text-[0.7rem] text-white/85">{KIND_LABEL[video.kind]}</span>
           <PlayBadge video={video} />
         </div>
         <div className="mt-3 pr-2">
-          {date && <p className="eyebrow text-[0.65rem] text-muted">{date}</p>}
-          <h3 className="mt-1 line-clamp-2 font-display text-lg leading-tight font-semibold">
+          {date && <p className="eyebrow text-[0.7rem] text-muted">{date}</p>}
+          <h3 className="mt-1 line-clamp-2 font-display text-[1.2rem] leading-tight font-semibold">
             <span className="link-sweep">{label}</span>
           </h3>
         </div>
@@ -102,7 +102,7 @@ export function VideoRow({ video }: { video: Video }) {
           <PlayBadge video={video} />
         </div>
         <div className="min-w-0">
-          <p className="eyebrow text-[0.65rem] text-muted">
+          <p className="eyebrow text-[0.7rem] text-muted">
             {meta.name}
             {date && ` · ${date}`}
           </p>
@@ -128,7 +128,7 @@ export function LandscapeCard({ video }: { video: Video }) {
           <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `${meta.name} video thumbnail`} platform={video.platform} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
           <PlayBadge video={video} size="lg" />
         </div>
-        {date && <p className="eyebrow mt-3 text-[0.65rem] text-muted">{date}</p>}
+        {date && <p className="eyebrow mt-3 text-[0.7rem] text-muted">{date}</p>}
         <h3 className="mt-1 line-clamp-2 font-display text-xl leading-tight font-semibold">
           <span className="link-sweep">{label}</span>
         </h3>

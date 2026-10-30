@@ -69,11 +69,11 @@ export function SectionHeading({
       </div>
       <div className="flex items-end gap-4">
         {index !== undefined && (
-          <span className="display outline-text hidden text-6xl sm:block lg:text-7xl" aria-hidden>
+          <span className="display outline-text hidden text-title sm:block" aria-hidden>
             {String(index).padStart(2, "0")}
           </span>
         )}
-        <Tag id={id} className="display text-[2.6rem] sm:text-6xl lg:text-7xl">
+        <Tag id={id} className="display text-title">
           {title}
         </Tag>
       </div>

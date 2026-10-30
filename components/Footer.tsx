@@ -16,7 +16,7 @@ export function Footer() {
           <span className="eyebrow flex items-center gap-2 text-muted">
             <span className="live-dot" aria-hidden /> Collaborations · Brands · Hello
           </span>
-          <span className="display mt-4 flex items-end justify-between gap-6 text-[clamp(3rem,11vw,8.5rem)]">
+          <span className="display mt-4 flex items-end justify-between gap-6 text-mega">
             <span>
               Let’s work <span className="text-brand transition-colors duration-300 group-hover:text-white">together</span>
             </span>
