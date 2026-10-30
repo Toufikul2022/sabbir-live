@@ -1,13 +1,15 @@
 "use client";
 
+import { platformMeta } from "@/lib/platforms";
 import type { Video } from "@/lib/videos";
 import { ExternalIcon, PlayIcon } from "./Icons";
 import { usePlayer } from "./PlayerProvider";
 
-/** Full-cover play control for the featured video in the hero. */
+/** Full-cover play control for the video at the top of the homepage. */
 export function HeroPlayButton({ video }: { video: Video }) {
   const play = usePlayer();
-  const label = video.title || "Latest Facebook Reel";
+  const name = platformMeta[video.platform].name;
+  const label = video.title || `Latest ${name} video`;
   const inner = (
     <span className="absolute top-1/2 left-1/2 inline-flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-brand shadow-[0_0_0_10px_rgb(236_28_36/0.25)] transition group-hover:scale-110">
       {video.embedUrl ? <PlayIcon className="ml-1 size-9" /> : <ExternalIcon className="size-8" />}
@@ -19,7 +21,7 @@ export function HeroPlayButton({ video }: { video: Video }) {
       {inner}
     </button>
   ) : (
-    <a href={video.watchUrl} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`Watch on Facebook: ${label}`}>
+    <a href={video.watchUrl} target="_blank" rel="noopener noreferrer" className={cls} aria-label={`Watch on ${name}: ${label}`}>
       {inner}
     </a>
   );

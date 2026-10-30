@@ -25,12 +25,14 @@ export default async function HomePage() {
   const tiktok = by("tiktok");
   const youtube = by("youtube");
 
-  // Facebook is the primary platform: its featured (or newest) video leads the page.
-  const hero = facebook.find((v) => v.featured) ?? facebook[0] ?? null;
-  const facebookRest = facebook.filter((v) => v !== hero).slice(0, 12);
-  const tiktokLatest = tiktok.slice(0, 6);
-  const ytShorts = youtube.filter((v) => v.orientation === "vertical").slice(0, 6);
-  const ytVideos = youtube.filter((v) => v.orientation === "landscape").slice(0, 4);
+  // The page opens with the featured video, or else the most recent one from any platform
+  // (getAllVideos is already sorted that way). It isn't repeated in the sections below.
+  const hero = all[0] ?? null;
+  const notHero = (v: Video) => v !== hero;
+  const facebookRest = facebook.filter(notHero).slice(0, 12);
+  const tiktokLatest = tiktok.filter(notHero).slice(0, 6);
+  const ytShorts = youtube.filter((v) => notHero(v) && v.orientation === "vertical").slice(0, 6);
+  const ytVideos = youtube.filter((v) => notHero(v) && v.orientation === "landscape").slice(0, 4);
   const counts: Record<Platform, number> = { facebook: facebook.length, tiktok: tiktok.length, youtube: youtube.length };
   const [line1, line2] = splitHeadline(siteConfig.hero.headline);
 
@@ -63,7 +65,9 @@ export default async function HomePage() {
             <span className="hidden sm:inline">{siteConfig.hero.eyebrow}</span>
           </div>
 
-          <div className="grid items-center gap-10 pt-8 sm:pt-10 lg:grid-cols-[1fr_16rem] lg:gap-14 xl:grid-cols-[1fr_17rem]">
+          <div className="grid items-center gap-8 pt-8 sm:pt-10 lg:grid-cols-[16rem_1fr] lg:gap-16 xl:grid-cols-[17rem_1fr]">
+            <HeroFeature video={hero} />
+
             <div>
               <h1 id="hero-title" className="display text-hero">
                 <span className="block overflow-hidden pb-[0.04em]">
@@ -83,8 +87,6 @@ export default async function HomePage() {
                 </div>
               </div>
             </div>
-
-            <HeroFeature video={hero} />
           </div>
         </div>
       </section>
@@ -245,7 +247,7 @@ function VideoRail({ videos, cols, numbered = false }: { videos: Video[]; cols: 
 function HeroFeature({ video }: { video: Video | null }) {
   if (!video) {
     return (
-      <div className="mx-auto w-full max-w-[16rem] lg:max-w-none" data-reveal>
+      <div className="mx-auto w-full max-w-[15rem] lg:max-w-none" data-reveal>
         <div className="relative flex aspect-[9/16] flex-col justify-between overflow-hidden border border-line bg-surface p-6">
           <PlatformIcon platform="facebook" className="pointer-events-none absolute -right-10 -bottom-10 size-64 text-facebook/15" />
           <p className="eyebrow relative flex items-center gap-2 text-white">
@@ -261,12 +263,12 @@ function HeroFeature({ video }: { video: Video | null }) {
     );
   }
   return (
-    <div className="group mx-auto w-full max-w-[16rem] lg:max-w-none" data-reveal>
+    <div className="group mx-auto w-full max-w-[15rem] lg:max-w-none" data-reveal>
       <p className="eyebrow mb-3 flex items-center gap-2">
-        <span className="live-dot" aria-hidden /> {video.featured ? "Featured on Facebook" : "Latest on Facebook"}
+        <span className="live-dot" aria-hidden /> {video.featured ? "Featured" : "Latest"} on {platformMeta[video.platform].name}
       </p>
       <div className="relative aspect-[9/16] overflow-hidden rounded-[var(--radius-card)] bg-surface-2 ring-1 ring-white/15 transition duration-500 group-hover:ring-2 group-hover:ring-brand">
-        <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : "Latest Facebook Reel thumbnail"} platform="facebook" sizes="272px" priority />
+        <Thumb src={video.thumbnail} alt={video.title ? `Thumbnail: ${video.title}` : `Latest ${platformMeta[video.platform].name} video`} platform={video.platform} videoId={video.id} sizes="272px" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" aria-hidden />
         <HeroPlayButton video={video} />
       </div>
