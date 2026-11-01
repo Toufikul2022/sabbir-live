@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { isValidSession, SESSION_COOKIE } from "@/lib/manage/auth";
+import { isAuthorised } from "@/lib/manage/auth";
 import { readVideos, writeVideos } from "@/lib/manage/github";
 import type { ManagedTikTok } from "@/lib/manage/types";
 import { parseVideoUrl } from "@/lib/video-url";
@@ -9,10 +8,6 @@ import { enrich, resolveShareUrl, type VideoEntry } from "@/lib/videos";
 export const runtime = "nodejs";
 
 const fail = (status: number, message: string) => NextResponse.json({ message }, { status });
-
-async function authorised() {
-  return isValidSession((await cookies()).get(SESSION_COOKIE)?.value);
-}
 
 function tiktokId(url: string) {
   const p = parseVideoUrl(url);
@@ -34,7 +29,7 @@ function list(videos: VideoEntry[]): ManagedTikTok[] {
 }
 
 async function run(fn: () => Promise<NextResponse>) {
-  if (!(await authorised())) return fail(401, "Please log in again.");
+  if (!(await isAuthorised())) return fail(401, "Please log in again.");
   try {
     return await fn();
   } catch (err) {

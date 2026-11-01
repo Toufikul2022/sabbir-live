@@ -1,5 +1,6 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { cookies } from "next/headers";
 
 export const SESSION_COOKIE = "sl_manage";
 
@@ -31,4 +32,9 @@ export function isValidSession(value: string | undefined) {
 /** What still needs configuring in Vercel before /manage can work. */
 export function missingSetup() {
   return ["MANAGE_PASSWORD", "GITHUB_TOKEN"].filter((k) => !process.env[k]);
+}
+
+/** True when the request carries a valid /manage login cookie. */
+export async function isAuthorised() {
+  return isValidSession((await cookies()).get(SESSION_COOKIE)?.value);
 }

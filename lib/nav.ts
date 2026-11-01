@@ -5,5 +5,6 @@ export const NAV: { href: string; label: string; platform?: Platform }[] = [
   { href: "/facebook", label: "Facebook", platform: "facebook" },
   { href: "/tiktok", label: "TikTok", platform: "tiktok" },
   { href: "/youtube", label: "YouTube", platform: "youtube" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];

@@ -10,7 +10,8 @@ The official website for **Sabbir Ahmed (Sabbir LIVE)**. It brings Facebook, Tik
 | YouTube | `/youtube` | Shorts grid (portrait) and regular videos grid (16:9) |
 | Contact | `/contact` | Contact form (Full Name, Email, Subject, Message) and social links |
 | Privacy | `/privacy` | Privacy policy describing what the site actually does |
-| Manage | `/manage` | Password-protected page to add, feature and remove TikTok videos from a phone |
+| Blog | `/blog` | Blog posts list; each post at `/blog/<slug>` |
+| Manage | `/manage` | Password-protected owner area: add TikTok videos and write blog posts |
 | Admin | `/admin` | Full content manager (all platforms, site text) |
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Sveltia CMS (Git-based, free) · Resend or SMTP for email.
@@ -113,6 +114,16 @@ The video appears on the website in about a minute. The title and upload date ar
 3. Redeploy (Deployments → ⋯ → Redeploy).
 
 How it works: each change is saved as a commit to `content/videos.json`, which triggers Vercel to redeploy. Login is protected by the password, with a secure cookie that lasts 30 days and a limit on repeated wrong guesses. Changing `MANAGE_PASSWORD` logs everyone out.
+
+### Writing blog posts (`/manage/blog`)
+
+Log in at `/manage` and open the **Blog posts** tab, then tap **New post**:
+
+- **Title, short summary, cover photo**: the photo is resized automatically before upload.
+- **Text**: the buttons add headings (H), **bold** (B), _italic_ (I), lists (•), quotes (❝), links and photos. Tap **Preview** to see the finished post.
+- **Publish** puts it live at `/blog/<title>` in about a minute; **Save as draft** keeps it hidden.
+
+Existing posts can be edited or deleted from the same list. Posts are saved as `content/blog/<slug>.json` and photos in `public/uploads/blog/`, both committed to GitHub through the same `GITHUB_TOKEN` as the TikTok tool.
 
 ### Using the admin panel (no code editing)
 
